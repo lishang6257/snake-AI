@@ -8,22 +8,17 @@ enum object{NONE,SNAKE,SNAKEHEAD,WALL};
 string enumToStr(const object& o)
 {
     switch(o){
-        case SNAKE     : return "Snake";
-        case SNAKEHEAD : return "SnakeHead";
-        case WALL      : return "WALL";
-        default        : return "NONE";
+        case SNAKE : return "SNAKE";
     }
 }
 
 class field{
 public:
     field();
-    inline object operator [](position& p){//const 问题
-        if(!p.isValid()) return WALL;
+    inline object operator [](const position& p){
+//        if(!p.isValid()) return WALL;
         else return Field[p.X()][p.Y()];
-    }
-    inline vector<snake>& getSnake(){
-        return Snake;
+//        return WALL;
     }
 private:
     object Field[max_field_x][max_field_y];//这里面不包含樯的位置
@@ -72,7 +67,5 @@ int main()
     vector<position> v = {position(1,2),position(1,3)};
     snake s(v);
     field f;
-    position p = position(1,1);
-    cout << enumToStr(f[p]);
     return 0;
 }

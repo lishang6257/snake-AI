@@ -1,0 +1,44 @@
+#ifndef SNAKE_H_INCLUDED
+#define SNAKE_H_INCLUDED
+
+#include <vector>
+#include "position.h"
+using namespace std;
+class snake{
+public:
+    snake(const vector<position> &v);
+    int move(position direction);
+    int eat
+private:
+    vector<position> asnake;
+};
+
+snake::snake(const vector<position> &v)
+{
+    asnake = v;
+}
+
+int snake::move(position dir)
+{
+    position nhead = asnake[0] + dir;
+    nhead.currect();
+    if(nhead != asnake[0]){
+        asnake.remove(asnake.size()-1);
+        asnake.insert(nhead,0);
+        return 0;
+    }
+    return 1;
+}
+
+snake::eatAndMove(position dir)
+{
+    position nhead = asnake[0] + dir;
+    nhead.currect();
+    if(nhead != asnake[0]){
+        asnake.insert(nhead,0);
+        return 0;
+    }
+    return 1;
+}
+
+#endif // SNAKE_H_INCLUDED
