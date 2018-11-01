@@ -32,10 +32,22 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="basic.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="field.cpp" />
+		<Unit filename="field.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="food.cpp" />
+		<Unit filename="food.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
 		<Unit filename="main.cpp" />
 		<Unit filename="position.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="snake.cpp" />
 		<Unit filename="snake.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

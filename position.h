@@ -1,10 +1,12 @@
+#pragma once
 #ifndef POSITION_H_INCLUDED
 #define POSITION_H_INCLUDED
 /*
-ÒÔÊı×éµÄ×óÉÏ½ÇÎªÔ­µã,Ë®Æ½ÏòÓÒÎªyÕı·½Ïò,ÊúÖ±ÏòÏÂÎªxÕı·½Ïò
+ä»¥æ•°ç»„çš„å·¦ä¸Šè§’ä¸ºåŸç‚¹,æ°´å¹³å‘å³ä¸ºyæ­£æ–¹å‘,ç«–ç›´å‘ä¸‹ä¸ºxæ­£æ–¹å‘
 */
 #include <iostream>
-#define max_field_x 22//°üº¬éÉ
+#include "basic.h"
+#define max_field_x 22//åŒ…å«æ¨¯
 #define max_field_y 22
 
 class position{
@@ -20,10 +22,10 @@ public:
     inline void setY(int Y){y = Y;}
 
     inline position currect(){
-        if(x<0) x = 0;
-        if(x>=max_field_x) x = max_field_x-1;
-        if(y<0) y = 0;
-        if(y>=max_field_y) y = max_field_y-1;
+        x = max(0,x);
+        x = min(x,max_field_x-1);
+        y = max(0,y);
+        y = min(y,max_field_y-1);
         return position(x,y);
     }
     inline bool isValid(){
@@ -32,18 +34,22 @@ public:
     }
 
     inline position operator + (const position& p) const {
-        return position(x+p.x,y+p.y).currect();
+        return position(x+p.x,y+p.y);
     }
     inline position operator - (const position& p) const {
-        return position(x-p.x,y-p.y).currect();
+        return position(x-p.x,y-p.y);
     }
     inline void operator +=(const position &p){
         x += p.x;y += p.y;
-        currect();
     }
     inline void operator -=(const position &p){
         x -= p.x;y -= p.y;
-        currect();
+    }
+    inline position operator * (const double& p) const {
+        return position(x*p,y*p);
+    }
+    inline position operator / (const double& p) const {
+        return position(x/p,y/p);
     }
     inline bool operator ==(const position &p){
         return x == p.x && y == p.y;
@@ -55,10 +61,10 @@ public:
         return (out << "(" << p.x << "," << p.y << ")");
     }
 
-    inline position left(){y = --y > 0 ? y : 0;return position(x,y);};
-    inline position right(){y = ++y < (max_field_y - 1) ? y : (max_field_y - 1);return position(x,y);}
-    inline position up(){x = --x > 0 ? x : 0;return position(x,y);}
-    inline position down(){x = ++x < (max_field_x - 1) ? x : (max_field_x - 1);return position(x,y);}
+    inline position left(){y = max(0,--y);return position(x,y);}
+    inline position right(){y = min(max_field_y - 1,++y);return position(x,y);}
+    inline position up(){x = max(0,--y);return position(x,y);}
+    inline position down(){x = min(max_field_x-1,++x);return position(x,y);}
 
 private:
     int x,y;

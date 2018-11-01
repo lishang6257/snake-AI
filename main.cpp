@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -131,12 +133,11 @@ void game::controller()
         char KBIn = _getch();
         if(GS == GSPlayOn){
             switch (KBIn) {
-                case 'w':case 'W': field.getSnake()[0].move(Direction[Up]);break;
-                case 's':case 'S': field.getSnake()[0].move(Direction[Down]);break;
-                case 'a':case 'A': field.getSnake()[0].move(Direction[Left]);break;
-                case 'd':case 'D': field.getSnake()[0].move(Direction[Right]);break;
+                case 'w':case 'W': field.getSnake()[0].setDirection(Up);break;
+                case 's':case 'S': field.getSnake()[0].setDirection(Down);break;
+                case 'a':case 'A': field.getSnake()[0].setDirection(Left);break;
+                case 'd':case 'D': field.getSnake()[0].setDirection(Right);break;
                 case 'p':case 'P': setGameStatus(GSPause); break;
-//    			case 'j':case 'J': if (snake->getFireLevel() > 0) isFire = true; break;
 			    default: break;
             }
         }
@@ -146,7 +147,9 @@ void game::controller()
 			    default: break;
             }
         }
+        field.getSnake()[0].move();
     }
+//    field.getSnake()[0].move();
     timer();
 }
 
@@ -155,15 +158,17 @@ void game::playOn()
     setGameStatus(GSPlayOn);
     while(1){
         viewer();
+
+//        field.getSnake()[0].autoMove();
         controller();
     }
 }
 
 int main()
 {
+    srand((unsigned int)time(NULL));
     game g;
     g.playOn();
-//    position p = position(1,1);
     return 0;
 }
 
