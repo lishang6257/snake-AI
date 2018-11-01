@@ -7,8 +7,13 @@ using namespace std;
 class Snake{
 public:
     Snake(const vector<position> &v);
+    Snake();//useless
+    ~Snake();
+
+    vector<position>& getSnake(){return asnake;}
     bool move(position direction);
     bool eatAndMove(position direction);
+    bool move(Field& f,position direction);
     bool autoMove();
 private:
     vector<position> asnake;
@@ -16,7 +21,18 @@ private:
 
 Snake::Snake(const vector<position> &v)
 {
-//    asnake.assign(v.begin(), v.end());
+    asnake.assign(v.begin(), v.end());
+}
+
+Snake::Snake()
+{
+    asnake.insert(asnake.begin(),position(3,3));
+    asnake.insert(asnake.begin(),position(4,3));
+}
+
+Snake::~Snake()
+{
+    asnake.clear();
 }
 
 bool Snake::move(position dir)
@@ -24,7 +40,6 @@ bool Snake::move(position dir)
     position nhead = asnake[0] + dir;
     nhead.currect();
     if(nhead != asnake[0]){
-
         asnake.erase(asnake.begin() + asnake.size() - 1);
         asnake.insert(asnake.begin(),nhead);
         return true;
@@ -32,7 +47,7 @@ bool Snake::move(position dir)
     return false;
 }
 
-bool snake::eatAndMove(position dir)
+bool Snake::eatAndMove(position dir)
 {
     position nhead = asnake[0] + dir;
     nhead.currect();
@@ -43,7 +58,14 @@ bool snake::eatAndMove(position dir)
     return false;
 }
 
-bool snake::autoMove()
+bool Snake::move(Field& f,position direction)
+{
+    position nhead = asnake[0] + dir;
+    nhead.currect();
+    if(field[])
+}
+
+bool Snake::autoMove()
 {
     for(int i = 0;i < 4;i ++){
         if(move(Direction[i])) return true;

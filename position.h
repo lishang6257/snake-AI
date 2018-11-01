@@ -4,8 +4,8 @@
 以数组的左上角为原点,水平向右为y正方向,竖直向下为x正方向
 */
 #include <iostream>
-#define max_field_x 20
-#define max_field_y 20
+#define max_field_x 22//包含樯
+#define max_field_y 22
 
 class position{
 public:
@@ -63,7 +63,5 @@ public:
 private:
     int x,y;
 };
-
-position Direction[4] = {position(-1,0),position(1,0),position(0,-1),position(0,1)};
 
 #endif // POSITION_H_INCLUDED

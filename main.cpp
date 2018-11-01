@@ -1,10 +1,21 @@
 #include <iostream>
 #include <vector>
+#include <ctime>
+
+#include "basic.h"
+
 #include "position.h"
 #include "snake.h"
+#include "field.h"
+
+//add for controller
+#include <conio.h>
+//add for paint
+#include <windows.h>
 using namespace std;
 
-enum object{NONE,SNAKE,SNAKEHEAD,WALL};
+extern position Direction[4] = {position(-1,0),position(1,0),position(0,-1),position(0,1)};
+
 string enumToStr(const object& o)
 {
     switch(o){
@@ -14,93 +25,164 @@ string enumToStr(const object& o)
         default        : return "NONE";
     }
 }
-
-class Field{
-public:
-    Field();
-    inline object operator [](position& p){//const Œ Ã‚
-        if(!p.isValid()) return WALL;
-        else return field[p.X()][p.Y()];
-    }
-
-    inline vector<Snake>& getSnake(){
-        return Snake;
-    }
-private:
-    object field[max_field_x][max_field_y];//’‚¿Ô√Ê≤ª∞¸∫¨È…µƒŒª÷√
-    vector<Snake> Snake;
-};
-
-Field::Field()
+string enumToStr(const gameStatus& gs)
 {
-    for(int i = 0;i < max_field_x;i ++){
-        for(int j = 0;j < max_field_y;j ++){
-            field[i][j] = NONE;
-        }
+    switch(gs){
+        case GSStart         : return "GSStart";
+        case GSPlayOn       : return "GSPlayOn";
+        case GSPause        : return "GSPause";
+        case GSGameOver     : return "GSGameOver";
+        default             : return "GSNONE";
     }
+}
+
+//Ëß£ÂÜ≥Âà∑Êñ∞Èó™Â±èÈóÆÈ¢ò Ôºö refer :http://bbs.csdn.net/topics/391949781?page=1#post-402928936
+bool cls() //ÁºñÁ®ãÊñπÂºèÂÆûÁé∞Ê∏ÖÈô§Â±èÂπï
+{
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD coordScreen = { 0 , 0 };    /* here's where we'll home the cursor */
+	COORD coordScreen1 = { max_field_x, 0 };    /* here's where we'll home the cursor */
+	DWORD cCharsWritten;
+	CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */
+	DWORD dwConSize;                 /* number of character cells in the current buffer */
+
+	CONSOLE_CURSOR_INFO cursor_info = { 1, 0 };
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info); //ÈöêËóèÊéßÂà∂Âè∞ÂÖâÊ†á
+
+																		 /* get the number of character cells in the current buffer */
+	if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
+		return false;
+	dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+
+	/* get the current text attribute */
+	if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
+		return false;
+
+	/* now set the buffer's attributes accordingly */
+	if (!FillConsoleOutputAttribute(hConsole, csbi.wAttributes, dwConSize, coordScreen1, &cCharsWritten))
+		return false;
+
+	/* put the cursor at (0, 0) */
+	if (!SetConsoleCursorPosition(hConsole, coordScreen))
+		return false;
 }
 
 class game{
 public:
     game();
     void viewer();
-    void timer();
+    void controller();
+    inline void timer();
+
+    inline void setGameStatus(gameStatus gs){lastGS = GS;GS = gs;}
+
+    inline double getTime(){return time;}
+    inline gameStatus getGameStatus(){return GS;}
+
+    void playOn();
 private:
+    //model
     Field field;
+    //timer
+    time_t startTime,tmpTime;
+    double time,pauseTime;//ms¬º¬∂
+    //other
+    gameStatus GS,lastGS;
+
+
     //test a snake wander
 };
 
 game::game()
 {
-    //test
-    vector<position> v = {position(1,2),position(1,3)};
-    Snake s(v);
+    //model Parameter
+
+    //viewer Parameter
+
+    //controller Parameter
+
+    //other parameter
+    GS = lastGS = GSNONE;
+    time = pauseTime = 0;
+}
+
+void game::timer()
+{
+    switch(GS){
+        case GSStart   : startTime = clock();break;
+        case GSPause   : if(lastGS == GSPlayOn) tmpTime = clock(); pauseTime += difftime(clock(),tmpTime);break;
+        case GSPlayOn  : time = time + difftime(clock(),startTime) - pauseTime;break;
+        default        : break;
+    }
+}
+
+void game::viewer()
+{
+    //fresh
+    cls();
+    field.fresh();
+    field.painter();
+}
+
+void game::controller()
+{
+    if (_kbhit()) {
+        cout << "hit\n";
+        char KBIn = _getch();
+        if(GS == GSPlayOn){
+            switch (KBIn) {
+                case 'w':case 'W': field.getSnake()[0].move(Direction[Up]);break;
+                case 's':case 'S': field.getSnake()[0].move(Direction[Down]);break;
+                case 'a':case 'A': field.getSnake()[0].move(Direction[Left]);break;
+                case 'd':case 'D': field.getSnake()[0].move(Direction[Right]);break;
+                case 'p':case 'P': setGameStatus(GSPause); break;
+//    			case 'j':case 'J': if (snake->getFireLevel() > 0) isFire = true; break;
+			    default: break;
+            }
+        }
+        else if(GS == GSPause){
+            switch (KBIn) {
+                case 'p':case 'P': setGameStatus(GSPlayOn); break;
+			    default: break;
+            }
+        }
+    }
+    timer();
+}
+
+void game::playOn()
+{
+    setGameStatus(GSPlayOn);
+    while(1){
+        viewer();
+        controller();
+    }
+}
+
+int main()
+{
+    game g;
+    g.playOn();
+//    position p = position(1,1);
+    return 0;
 }
 
 //void login::help() {
-//	cout << "Ã∞≥‘…ﬂ◊˜’Ω\n";
+//	cout << "√å¬∞¬≥√î√â√ü√ó√∑√ï¬Ω\n";
 //	cout << "\n\noperator :\n";
 //	cout << "w : up                 |  s : down\n";
 //	cout << "a : left               |  d : right\n";
 //	cout << "j : fire               |  p : pause\n";
 //	cout << "\nimage :\n";
-//	cout << "wall               : °ˆ  | obstacle    : °ı\n";
-//	cout << "snakeHead          : °—  | snakeBody   : °\n";
-//	cout << "fire               : °¡  | food_normal : °Ô\n";
-//	cout << "food_accelerator   : ¶∏  | food_attack : ¶≤\n";
-//	cout << "food_invincibility : °Ú  |\n";
+//	cout << "wall               : ¬°√∂  | obstacle    : ¬°√µ\n";
+//	cout << "snakeHead          : ¬°√ë  | snakeBody   : ¬°√∞\n";
+//	cout << "fire               : ¬°√Å  | food_normal : ¬°√Ø\n";
+//	cout << "food_accelerator   : ¬¶¬∏  | food_attack : ¬¶¬≤\n";
+//	cout << "food_invincibility : ¬°√≤  |\n";
 //	cout << "\nauthor : Peter Guan\n";
 //	cout << "email : 1991969298@qq.com\n";
 //	cout << "\npress any Key to start!\n";
 //	_getch();
 //}
 
-void game::viewer()
-{
-    //fresh
-    //paint wall
-    for(int i = 0;i < max_field_x;i ++){
-        for(int j = 0;j < max_field_y;j ++){
-            position p = position(i,j);
-            switch(field[p]){
-                case WALL       :  cout << "°ˆ";break;
-                case SNAKEHEAD  :  cout << "°—";break;
-                case SNAKE      :  cout << "°";break;
-                default         :  cout << "  ";break;
-            }
-        }
-        cout << endl;
-    }
-}
 
-int main()
-{
-    vector<position> v = {position(1,2),position(1,3)};
-    Snake s(v);
-    Field f;
-    game g;
-    g.viewer();
-    position p = position(1,1);
-    cout << enumToStr(f[p]);
-    return 0;
-}
