@@ -4,8 +4,8 @@
 以数组的左上角为原点,水平向右为y正方向,竖直向下为x正方向
 */
 #include <iostream>
-#define max_field_x 50
-#define max_field_y 50
+#define max_field_x 20
+#define max_field_y 20
 
 class position{
 public:

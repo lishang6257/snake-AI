@@ -4,9 +4,9 @@
 #include "position.h"
 using namespace std;
 
-class snake{
+class Snake{
 public:
-    snake(const vector<position> &v);
+    Snake(const vector<position> &v);
     bool move(position direction);
     bool eatAndMove(position direction);
     bool autoMove();
@@ -14,12 +14,12 @@ private:
     vector<position> asnake;
 };
 
-snake::snake(const vector<position> &v)
+Snake::Snake(const vector<position> &v)
 {
 //    asnake.assign(v.begin(), v.end());
 }
 
-bool snake::move(position dir)
+bool Snake::move(position dir)
 {
     position nhead = asnake[0] + dir;
     nhead.currect();
@@ -32,7 +32,7 @@ bool snake::move(position dir)
     return false;
 }
 
-bool snake::eatAndMove(position dir)
+bool Snake::eatAndMove(position dir)
 {
     position nhead = asnake[0] + dir;
     nhead.currect();
@@ -43,7 +43,7 @@ bool snake::eatAndMove(position dir)
     return false;
 }
 
-bool snake::autoMove()
+bool Snake::autoMove()
 {
     for(int i = 0;i < 4;i ++){
         if(move(Direction[i])) return true;

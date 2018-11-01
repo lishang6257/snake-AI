@@ -15,63 +15,91 @@ string enumToStr(const object& o)
     }
 }
 
-class field{
+class Field{
 public:
-    field();
+    Field();
     inline object operator [](position& p){//const 问题
         if(!p.isValid()) return WALL;
-        else return Field[p.X()][p.Y()];
+        else return field[p.X()][p.Y()];
     }
-    inline vector<snake>& getSnake(){
+
+    inline vector<Snake>& getSnake(){
         return Snake;
     }
 private:
-    object Field[max_field_x][max_field_y];//这里面不包含樯的位置
-    vector<snake> Snake;
+    object field[max_field_x][max_field_y];//这里面不包含樯的位置
+    vector<Snake> Snake;
 };
 
-field::field()
+Field::Field()
 {
     for(int i = 0;i < max_field_x;i ++){
         for(int j = 0;j < max_field_y;j ++){
-            Field[i][j] = NONE;
+            field[i][j] = NONE;
         }
     }
 }
-//class game{
-//public:
-//    game();
-//    void show();
-//
-//private:
-//    //friend class feild;
-////    vector<snake> Snakes;
-//
-//    //test a snake wander
-//    snake s;
-//};
 
-//game::game()
-//{
-//    //initial wall
-//    for(int i = 0;i < max_field_x;i ++) {field[i][0] = field[i][max_field_y-1] = WALL;}
-//    for(int j = 0;j < max_field_y;j ++) {field[0][j] = field[max_field_x - 1][j] = WALL;}
-//
-//    //test
-//    vector<position> v = {position(1,2),position(1,3)};
-//    snake s(v);
+class game{
+public:
+    game();
+    void viewer();
+    void timer();
+private:
+    Field field;
+    //test a snake wander
+};
+
+game::game()
+{
+    //test
+    vector<position> v = {position(1,2),position(1,3)};
+    Snake s(v);
+}
+
+//void login::help() {
+//	cout << "贪吃蛇作战\n";
+//	cout << "\n\noperator :\n";
+//	cout << "w : up                 |  s : down\n";
+//	cout << "a : left               |  d : right\n";
+//	cout << "j : fire               |  p : pause\n";
+//	cout << "\nimage :\n";
+//	cout << "wall               : ■  | obstacle    : □\n";
+//	cout << "snakeHead          : ⊙  | snakeBody   : ○\n";
+//	cout << "fire               : ×  | food_normal : ★\n";
+//	cout << "food_accelerator   : Ω  | food_attack : Σ\n";
+//	cout << "food_invincibility : ◎  |\n";
+//	cout << "\nauthor : Peter Guan\n";
+//	cout << "email : 1991969298@qq.com\n";
+//	cout << "\npress any Key to start!\n";
+//	_getch();
 //}
 
-//void game::show()
-//{
-//     //fresh
-//}
+void game::viewer()
+{
+    //fresh
+    //paint wall
+    for(int i = 0;i < max_field_x;i ++){
+        for(int j = 0;j < max_field_y;j ++){
+            position p = position(i,j);
+            switch(field[p]){
+                case WALL       :  cout << "■";break;
+                case SNAKEHEAD  :  cout << "⊙";break;
+                case SNAKE      :  cout << "○";break;
+                default         :  cout << "  ";break;
+            }
+        }
+        cout << endl;
+    }
+}
 
 int main()
 {
     vector<position> v = {position(1,2),position(1,3)};
-    snake s(v);
-    field f;
+    Snake s(v);
+    Field f;
+    game g;
+    g.viewer();
     position p = position(1,1);
     cout << enumToStr(f[p]);
     return 0;
