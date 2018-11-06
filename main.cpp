@@ -147,7 +147,8 @@ void game::controller()
 			    default: break;
             }
         }
-        field.getSnake()[0].move();
+        if(!field.getSnake()[0].move(field)) cout << "game over";
+        else cout << "continue .....";
     }
 //    field.getSnake()[0].move();
     timer();

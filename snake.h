@@ -15,6 +15,14 @@
 
 extern position Direction[4];
 
+
+/*
+这里很棘手的一个问题是蛇的速度的定义放在哪儿
+用按压键的时长作为修改依据
+方案一：在蛇结构体中，带来位置更新的问题（不是整格点数；一格一格更新）
+方案二：在线程控制中，更改刷新间隔
+*/
+
 using namespace std;
 
 class Snake{
@@ -28,6 +36,7 @@ public:
         //更新速度
         updateSpeed();
     }
+    inline int getID(){return id;}
     vector<position>& getSnake(){return asnake;}
     inline direction getDirection(){return dir;}
     inline double getAccelation(){return acceleration;}
@@ -43,13 +52,16 @@ public:
     bool move(Field& f);
     bool autoMove();
 private:
+    int id;
     vector<position> asnake;
     vector<direction> historyDir;
+
     double speed;
     double acceleration;
     direction dir,lastDir;
     //add for food & weapon system
-    vector<Food> f;
+    vector<sankeStatus> snakeStatus;
+    vector<Food> food;
     Food curUsingFood;
 
     //private member function

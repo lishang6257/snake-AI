@@ -18,19 +18,24 @@ Snake::Snake()
     asnake.insert(asnake.begin(),position(3,3));
     asnake.insert(asnake.begin(),position(4,3));
     asnake.insert(asnake.begin(),position(5,3));
+    asnake.insert(asnake.begin(),position(6,3));
+    asnake.insert(asnake.begin(),position(7,3));
+    asnake.insert(asnake.begin(),position(8,3));
 }
 
 Snake::~Snake()
 {
     asnake.clear();
-    foods.clear();
+    food.clear();
 }
 
-//这里还没有考虑速度对蛇身影响
+//这里还没有考虑速度对其他蛇身影响
 bool Snake::move()
 {
     position nhead = asnake[0] + Direction[dir]*speed;
     nhead.currect();
+    for(int i = 0;i < asnake.size() - 1;i ++)
+        if(asnake[i] == nhead) return false;
     if(nhead != asnake[0]){
         asnake.erase(asnake.begin() + asnake.size() - 1);
         asnake.insert(asnake.begin(),nhead);
@@ -45,6 +50,7 @@ bool Snake::eatAndMove()
     nhead.currect();
     if(nhead != asnake[0]){
         asnake.insert(asnake.begin(),nhead);
+        cout << "eat.............\n";
         return true;
     }
     return false;
@@ -54,7 +60,21 @@ bool Snake::move(Field& f)
 {
     position nhead = asnake[0] + Direction[dir]*speed;
     nhead.currect();
-    if(f[nhead] > FOOD_Start && f[nhead] < FOOD_End) return eatAndMove();
+    //check snake collosion
+//    Snake& snakes = f.getSnake();
+//    for()
+    if(f[nhead] == WALL || f[nhead] > OBSTACLE_Start && f[nhead] < OBSTACLE_End) return false;
+    if(f[nhead] == WALL || f[nhead] > OBSTACLE_Start && f[nhead] < OBSTACLE_End) return false;
+    if(f[nhead] > FOOD_Start && f[nhead] < FOOD_End) {
+        vector<Food>& foods = f.getFood();
+        for(int i = 0;i < foods.size();i ++){
+            if(foods[i].getPosition() == nhead) {
+                cout << "delete food......\n";
+                foods.erase(foods.begin() + i);break;
+            }
+        }
+        return eatAndMove();
+    }
     else return move();
 }
 
