@@ -4,7 +4,6 @@
 #include <vector>
 #include "position.h"
 #include "basic.h"
-#include <ctime>
 #include <cstdlib>
 using namespace std;
 
@@ -13,8 +12,9 @@ class Field;
 class Food{
 public:
     Food();
-    Food(Field& field);
+//    Food(Field& field);
     inline position& getPosition(){return p;}
+    inline void setPosition(position pos){p = pos;}
     inline object getFoodType(){return foodType;}
     inline double getBuffTime(){return BuffTime;}
     inline double getSurvivalTime(){return survivalTime;}

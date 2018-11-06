@@ -25,14 +25,32 @@ Field::Field()
 
     //init food
     while(foods.size() < max_food_num){
-        foods.push_back(Food(*this));
+        createOneFood();
     }
 }
 
 Field::~Field()
 {
     snakes.clear();
+    foods.clear();
 }
+
+bool Field::createOneFood()
+{
+    int i,j,it=0;
+    while(it ++ < 10){
+        i = rand()%max_field_x;
+        j = rand()%max_field_y;
+        if(field[i][j] == NONE){
+            Food f;
+            f.setPosition(position(i,j));
+            foods.push_back(f);
+            return true;
+        }
+    }
+    return false;
+}
+
 
 void Field::fresh()
 {
@@ -47,6 +65,9 @@ void Field::fresh()
         field[s.getSnake()[0].X()][s.getSnake()[0].Y()] = SNAKEHEAD;
     }
     //更新 食物
+    while(foods.size() < max_food_num){
+        createOneFood();
+    }
     for(auto f : foods){
         field[f.getPosition().X()][f.getPosition().Y()] = f.getFoodType();
     }

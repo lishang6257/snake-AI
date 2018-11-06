@@ -129,7 +129,6 @@ void game::viewer()
 void game::controller()
 {
     if (_kbhit()) {
-        cout << "hit\n";
         char KBIn = _getch();
         if(GS == GSPlayOn){
             switch (KBIn) {
@@ -147,11 +146,12 @@ void game::controller()
 			    default: break;
             }
         }
-        if(!field.getSnake()[0].move(field)) cout << "game over";
-        else cout << "continue .....";
+//        if(!field.getSnake()[0].move(field)) cout << "game over";
+//        else cout << "continue .....";
     }
-//    field.getSnake()[0].move();
-    timer();
+    if(!field.getSnake()[0].move(field)) cout << "game over";
+    else cout << "continue .....";
+//    timer();
 }
 
 void game::playOn()

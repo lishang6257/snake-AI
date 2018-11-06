@@ -7,7 +7,6 @@ Snake::Snake(const vector<position> &v)
     acceleration = 0;
     dir = lastDir = DNone;
     asnake.assign(v.begin(), v.end());
-
 }
 
 Snake::Snake()
@@ -69,7 +68,7 @@ bool Snake::move(Field& f)
         vector<Food>& foods = f.getFood();
         for(int i = 0;i < foods.size();i ++){
             if(foods[i].getPosition() == nhead) {
-                cout << "delete food......\n";
+//                cout << "delete food......\n";
                 foods.erase(foods.begin() + i);break;
             }
         }

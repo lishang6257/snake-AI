@@ -6,6 +6,8 @@
 #include "position.h"
 #include "basic.h"
 
+#include <cstdlib>
+
 #define max_food_num 3
 
 using namespace std;
@@ -32,6 +34,7 @@ public:
         return foods;
     }
 
+    bool createOneFood();
     void painter();
     void fresh();
 private:
