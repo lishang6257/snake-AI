@@ -1,9 +1,8 @@
-
 #ifndef FOOD_H_INCLUDED
 #define FOOD_H_INCLUDED
-#include <vector>
-#include "position.h"
+
 #include "basic.h"
+
 #include <cstdlib>
 using namespace std;
 

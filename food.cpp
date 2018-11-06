@@ -1,5 +1,4 @@
 #include "food.h"
-#include "field.h"
 
 Food::Food()
 {

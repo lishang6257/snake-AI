@@ -1,4 +1,3 @@
-#pragma once
 #include "snake.h"
 
 Snake::Snake(const vector<position> &v)
@@ -6,7 +5,7 @@ Snake::Snake(const vector<position> &v)
     speed = 1;
     acceleration = 0;
     dir = lastDir = DNone;
-    asnake.assign(v.begin(), v.end());
+    asnake = v;
 }
 
 Snake::Snake()
@@ -31,7 +30,7 @@ Snake::~Snake()
 //这里还没有考虑速度对其他蛇身影响
 bool Snake::move()
 {
-    position nhead = asnake[0] + Direction[dir]*speed;
+    position nhead = asnake[0] + Direction[dir];
     nhead.currect();
     for(int i = 0;i < asnake.size() - 1;i ++)
         if(asnake[i] == nhead) return false;
@@ -45,7 +44,7 @@ bool Snake::move()
 
 bool Snake::eatAndMove()
 {
-    position nhead = asnake[0] + Direction[dir]*speed;
+    position nhead = asnake[0] + Direction[dir];
     nhead.currect();
     if(nhead != asnake[0]){
         asnake.insert(asnake.begin(),nhead);
@@ -57,9 +56,17 @@ bool Snake::eatAndMove()
 
 bool Snake::move(Field& f)
 {
+    /*蛇的移动规则
+    1.按方向进行平移
+    2.遇到食物，增长，获得食物加成
+    3.遇到障碍物，判定蛇的加成
+    4.遇到蛇体，判定位置关系，进行生成碰撞结果
+    5.遇到墙体，死亡
+    */
     position nhead = asnake[0] + Direction[dir]*speed;
     nhead.currect();
     //check snake collosion
+
 //    Snake& snakes = f.getSnake();
 //    for()
     if(f[nhead] == WALL || f[nhead] > OBSTACLE_Start && f[nhead] < OBSTACLE_End) return false;

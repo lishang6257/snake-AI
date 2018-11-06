@@ -1,4 +1,3 @@
-#pragma once
 #include "field.h"
 #include "snake.h"
 #include "food.h"
@@ -74,6 +73,7 @@ void Field::fresh()
 
 }
 
+
 void Field::painter()
 {
     //paint wall
@@ -83,10 +83,17 @@ void Field::painter()
                 case WALL       :  cout << "■";break;
                 case SNAKEHEAD  :  cout << "⊙";break;
                 case SNAKE      :  cout << "○";break;
-                case Food_Normal       :  cout << "◎";break;
-                case FOOD_Accelerator  :  cout << "Ω";break;
-                case FOOD_Weapon_Attack:  cout << "Σ";break;
-                case FOOD_Invincible   :  cout << "★";break;
+                case Food_Normal         :  cout << "◎";break;
+                case FOOD_Accelerate     :  cout << "Ω";break;
+                case FOOD_Decelerate     :  cout << "Ω";break;
+                case FOOD_Invincible     :  cout << "★";break;
+                case FOOD_Invisible      :  cout << "Ω";break;
+                case FOOD_Weapon_Attack  :  cout << "fa";break;
+                case Food_Weapon_Bramble :  cout << "fb";break;
+                case WEAPON_Fire         :  cout << "wf";break;
+                case WEAPON_Bramble      :  cout << "wb";break;
+
+
                 default                :  cout << "  ";break;
             }
         }

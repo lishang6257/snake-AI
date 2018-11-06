@@ -6,12 +6,10 @@
 #define min_speed 1
 #define max_acceleration 1
 
+
 #include "position.h"
 #include "field.h"
 #include "food.h"
-
-#define max(a,b) ((a) > (b) ? (a) : (b))
-#define min(a,b) ((a) < (b) ? (a) : (b))
 
 extern position Direction[4];
 
@@ -21,9 +19,11 @@ extern position Direction[4];
 用按压键的时长作为修改依据
 方案一：在蛇结构体中，带来位置更新的问题（不是整格点数；一格一格更新）
 方案二：在线程控制中，更改刷新间隔
+
+在多次权衡中选择方案二
 */
 
-using namespace std;
+
 
 class Snake{
 public:
@@ -42,10 +42,10 @@ public:
     inline double getAccelation(){return acceleration;}
 
     inline void updateSpeed(){
-        updateAcceleration();
-        speed += acceleration;
-        speed = max(min_speed,speed);
-        speed = min(speed,max_speed);
+//        updateAcceleration();
+//        speed += acceleration;
+        speed = Max(min_speed,speed);
+        speed = Min(speed,max_speed);
     }
     bool move();
     bool eatAndMove();
@@ -60,19 +60,21 @@ private:
     double acceleration;
     direction dir,lastDir;
     //add for food & weapon system
-    vector<sankeStatus> snakeStatus;
+    pair<snakeStatus,double> snakeStatuss;
+//    object currentUsingWeapon;
+
     vector<Food> food;
     Food curUsingFood;
 
     //private member function
-    inline void updateAcceleration(){
-        if(dir == DNone)
-            acceleration = 0;
-        else if(dir != lastDir)
-            acceleration = max(0,acceleration-1);
-        else
-            acceleration = min(max_acceleration,acceleration+1);
-    }
+//    inline void updateAcceleration(){
+//        if(dir == DNone)
+//            acceleration = 0;
+//        else if(dir != lastDir)
+//            acceleration = max(0,acceleration-1);
+//        else
+//            acceleration = min(max_acceleration,acceleration+1);
+//    }
 };
 
 #endif // SNAKE_H_INCLUDED

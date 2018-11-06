@@ -2,8 +2,6 @@
 #ifndef FIELD_H_INCLUDED
 #define FIELD_H_INCLUDED
 //default
-#include <vector>
-#include "position.h"
 #include "basic.h"
 
 #include <cstdlib>

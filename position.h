@@ -1,13 +1,16 @@
 #pragma once
 #ifndef POSITION_H_INCLUDED
 #define POSITION_H_INCLUDED
+
+
+#include "basic.h"
+
+#define max_field_x 22//包含樯
+#define max_field_y 22
 /*
 以数组的左上角为原点,水平向右为y正方向,竖直向下为x正方向
 */
-#include <iostream>
-#include "basic.h"
-#define max_field_x 22//包含樯
-#define max_field_y 22
+
 
 class position{
 public:
@@ -22,10 +25,10 @@ public:
     inline void setY(int Y){y = Y;}
 
     inline position currect(){
-        x = max(0,x);
-        x = min(x,max_field_x-1);
-        y = max(0,y);
-        y = min(y,max_field_y-1);
+        x = Max(0,x);
+        x = Min(x,max_field_x-1);
+        y = Max(0,y);
+        y = Min(y,max_field_y-1);
         return position(x,y);
     }
     inline bool isValid(){
@@ -61,10 +64,10 @@ public:
         return (out << "(" << p.x << "," << p.y << ")");
     }
 
-    inline position left(){y = max(0,--y);return position(x,y);}
-    inline position right(){y = min(max_field_y - 1,++y);return position(x,y);}
-    inline position up(){x = max(0,--y);return position(x,y);}
-    inline position down(){x = min(max_field_x-1,++x);return position(x,y);}
+    inline position left(){y = Max(0,--y);return position(x,y);}
+    inline position right(){y = Min(max_field_y - 1,++y);return position(x,y);}
+    inline position up(){x = Max(0,--y);return position(x,y);}
+    inline position down(){x = Min(max_field_x-1,++x);return position(x,y);}
 
 private:
     int x,y;

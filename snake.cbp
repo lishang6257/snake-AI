@@ -44,6 +44,7 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="obstacle.h" />
 		<Unit filename="position.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
@@ -51,6 +52,8 @@
 		<Unit filename="snake.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="weapon.cpp" />
+		<Unit filename="weapon.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

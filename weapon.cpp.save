@@ -1,0 +1,25 @@
+#include "weapon.h"
+
+Weapon::Weapon(vector<position>&pos,object wt,direction d,double s)
+{
+    weapon.assign(pos.begin(),pos.end());
+    weaponType = wt;
+    speed = s;
+    dir = d;
+}
+
+void Weapon::setWeapon(vector<position>& pos)
+{
+    weapon.assign(pos.begin(),pos.end());
+}
+
+void Weapon::move(Field& f)
+{
+    /*子弹更新规则
+    1. 按照给定的向前平移
+    2. 若遇到障碍物，判定武器的属性，是否穿过，消失，或者障碍物是否
+    */
+    position nhead = weapon[0] + Direction[dir];
+    nhead.currect();
+
+}

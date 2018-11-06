@@ -158,7 +158,7 @@ void game::playOn()
 {
     setGameStatus(GSPlayOn);
     while(1){
-        viewer();
+//        viewer();
 
 //        field.getSnake()[0].autoMove();
         controller();
