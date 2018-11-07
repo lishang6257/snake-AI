@@ -1,27 +1,33 @@
 #ifndef FOOD_H_INCLUDED
 #define FOOD_H_INCLUDED
-#include <vector>
-#include "position.h"
+
 #include "basic.h"
-#include <ctime>
+
+#include <cstdlib>
 using namespace std;
+
+class Field;
 
 class Food{
 public:
-    Food(Field& field);
+    Food();
+    Food(position p);
+//    Food(Field& field);
+    inline position& getPosition(){return p;}
+    inline void setPosition(position pos){p = pos;}
+    inline void set
+    inline object getFoodType(){return foodType;}
+    inline double getBuffTime(){return BuffTime;}
+    inline double getSurvivalTime(){return survivalTime;}
+    inline snakeStatus ToSnakeStaus(){
+        return snakeStatus(foodType - FOOD_Start - 1);
+    }
 private:
     position p;
     object foodType;
     double BuffTime,survivalTime;
 };
 
-Food::Food(Field& field){
-    BuffTime = 5;
-    survivalTime = 10;
-    srand((unsigned int)time(NULL));
-    foodType = object(rand()%(FOOD_End-FOOD_Start - 1) + FOOD_Start + 1);
-    int i,j;
-    while(field())
-}
+
 
 #endif // FOOD_H_INCLUDED

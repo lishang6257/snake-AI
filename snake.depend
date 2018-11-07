@@ -1,37 +1,40 @@
 # depslib dependency file v1.0
-1541498238 source:f:\codeblocks\snake-ai\snake\field.cpp
+1541593428 source:f:\codeblocks\snake-ai\snake\field.cpp
 	"field.h"
 	"snake.h"
 	"food.h"
 
-1541498068 f:\codeblocks\snake-ai\snake\field.h
+1541592578 f:\codeblocks\snake-ai\snake\field.h
 	"basic.h"
 	<cstdlib>
 
-1541498138 f:\codeblocks\snake-ai\snake\position.h
+1541590022 f:\codeblocks\snake-ai\snake\position.h
 	"basic.h"
+	<cmath>
 
-1541513856 f:\codeblocks\snake-ai\snake\basic.h
+1541610990 f:\codeblocks\snake-ai\snake\basic.h
 	<vector>
 	<iostream>
+	<cmath>
 	"position.h"
 
-1541514000 f:\codeblocks\snake-ai\snake\snake.h
+1541613932 f:\codeblocks\snake-ai\snake\snake.h
 	"position.h"
 	"field.h"
 	"food.h"
+	<map>
 
-1541498026 f:\codeblocks\snake-ai\snake\food.h
+1541518582 f:\codeblocks\snake-ai\snake\food.h
 	"basic.h"
 	<cstdlib>
 
-1541498250 source:f:\codeblocks\snake-ai\snake\food.cpp
+1541518472 source:f:\codeblocks\snake-ai\snake\food.cpp
 	"food.h"
 
-1541499502 source:f:\codeblocks\snake-ai\snake\snake.cpp
+1541606124 source:f:\codeblocks\snake-ai\snake\snake.cpp
 	"snake.h"
 
-1541495264 source:f:\codeblocks\snake-ai\snake\main.cpp
+1541609432 source:f:\codeblocks\snake-ai\snake\main.cpp
 	<iostream>
 	<vector>
 	<ctime>
@@ -42,7 +45,7 @@
 	<conio.h>
 	<windows.h>
 
-1541499520 source:f:\codeblocks\snake-ai\snake\weapon.cpp
+1541509956 source:f:\codeblocks\snake-ai\snake\weapon.cpp
 	"weapon.h"
 
 1541498162 f:\codeblocks\snake-ai\snake\weapon.h

@@ -5,8 +5,12 @@
 #define Max(a,b) ((a) > (b) ? (a) : (b))
 #define Min(a,b) ((a) < (b) ? (a) : (b))
 
+//#define normalDistribution(u,s,x) (exp(-(x-u)*(x-u)/(2*u*u))/(u*sqrt(2*3.141)))
+
+
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 #include "position.h"
 
@@ -39,7 +43,7 @@ WEAPON_Bramble（荆棘果实）
 解释：
 1. 伤害
 普通伤害：对蛇身造成伤害，按照伤害处在蛇身的位置计算损失长度，并将损失长度按照一定方式分布在受伤点附近
-七寸伤害，当受伤点刚好在七寸位置，蛇体直接死亡；若在求整后的七寸位置，概率回到出生状态；
+七寸伤害，当受伤点刚好在七寸位置，蛇体直接死亡；若在求整后的七寸位置，概率截断；
 爆头伤害：当场去世
 
 2. 距离
@@ -50,7 +54,7 @@ WEAPON_Bramble（荆棘果实）
 无视任何障碍物，不会对食物，蛇体做出任何反应
 在透明->正常形态时
 若身体上的障碍物小于体长1/10产生碾压效果；否则普通障碍物按一次火焰伤害计算，荆棘障碍物发动减速效果，
-蛇身交错则在固定系统时间内，按其他蛇按该点火焰伤害（自己无视伤害），时间流逝后，自动计算伤害[不计算七寸伤害]
+蛇身交错则在固定系统时间内(半幽灵态)，按其他蛇按该点火焰伤害（自己无视伤害），时间流逝后（正常态），自动计算伤害[不计算七寸伤害]
 
 4.(de)buff果实有系统时效限制
 
@@ -67,8 +71,10 @@ enum object{NONE,SNAKE,SNAKEHEAD,WALL,
         FOOD_Start,Food_Normal,FOOD_Accelerate,FOOD_Decelerate,FOOD_Invincible,FOOD_Invisible,FOOD_Weapon_Attack,Food_Weapon_Bramble,FOOD_End,
         WEAPON_Start,WEAPON_Fire,WEAPON_Bramble,WEAPON_End};
 enum gameStatus{GSNONE,GSStart,GSPlayOn,GSPause,GSGameOver};
-enum snakeStatus{SSNormal,SSInvincible,SSInvisible,SSWeapon_Attack};
+enum snakeStatus{SSNormal,SSAccelarate,SSDecelerate,SSInvincible,SSInvisible,SSWeapon_Fire,SSWeapon_Bramble,SSHalfInivisible};//添加注意对齐食物顺序
 enum direction{Up,Down,Left,Right,DNone};
+typedef pair<snakeStatus,double> SStatus;//snakeStatus,指状态；double指状态开始时间
+
 
 #endif // BASIC_H_INCLUDED
 

@@ -31,8 +31,13 @@ public:
     inline vector<Food>& getFood(){
         return foods;
     }
+    inline void setObject(position &p,object o){
+        field[p.X()][p.Y()] = o;
+    }
+    bool deleteSnake(int id);
 
     bool createOneFood();
+    bool createNFoodAtPosition(position p,int n);
     void painter();
     void fresh();
 private:

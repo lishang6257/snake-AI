@@ -11,12 +11,19 @@ class Field;
 class Food{
 public:
     Food();
+    Food(position p);
 //    Food(Field& field);
-    inline position& getPosition(){return p;}
+
     inline void setPosition(position pos){p = pos;}
+    inline void setFoodType(object o){foodType = o;}
+
+    inline position& getPosition(){return p;}
     inline object getFoodType(){return foodType;}
     inline double getBuffTime(){return BuffTime;}
     inline double getSurvivalTime(){return survivalTime;}
+    inline snakeStatus ToSnakeStaus(){
+        return snakeStatus(foodType - FOOD_Start - 1);
+    }
 private:
     position p;
     object foodType;

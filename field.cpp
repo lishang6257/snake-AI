@@ -50,6 +50,21 @@ bool Field::createOneFood()
     return false;
 }
 
+bool Field::createNFoodAtPosition(position p,int n)
+{
+
+}
+
+bool Field::deleteSnake(int id)
+{
+        //这里不更改field值
+        for(int i = 0;i < snakes.size();i ++){
+//            if(snakes[i].getID() == id){
+                snakes.erase(snakes.begin()+i);break;
+//            }
+        }
+}
+
 
 void Field::fresh()
 {
@@ -59,9 +74,11 @@ void Field::fresh()
         }
     }
     //更新 snake
-    for(auto s : snakes){
-        for(auto sp : s.getSnake()) field[sp.X()][sp.Y()] = SNAKE;
-        field[s.getSnake()[0].X()][s.getSnake()[0].Y()] = SNAKEHEAD;
+    for(int i = 0;i < snakes.size();i++){
+//        if(!snakes[i].isAlive()) snakes.erase(snakes.begin()+i);
+        if(!snakes[i].isAlive()) continue;
+        for(auto sp : snakes[i].getSnake()) field[sp.X()][sp.Y()] = SNAKE;
+        field[snakes[i].getSnake()[0].X()][snakes[i].getSnake()[0].Y()] = SNAKEHEAD;
     }
     //更新 食物
     while(foods.size() < max_food_num){

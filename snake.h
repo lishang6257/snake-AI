@@ -6,10 +6,18 @@
 #define min_speed 1
 #define max_acceleration 1
 
+#define hurt_rate_cutPoint 0.5//截断伤害
+#define hurt_rate_noramlPoint 0.5//普通伤害
+//#define hurt_rate_head 0.25//爆头伤害
+#define hurt_rate_heart 0.25//七寸伤害
+
+#define change_rate 0.5 //震荡概率
+
 
 #include "position.h"
 #include "field.h"
 #include "food.h"
+#include <map>
 
 extern position Direction[4];
 
@@ -47,10 +55,16 @@ public:
         speed = Max(min_speed,speed);
         speed = Min(speed,max_speed);
     }
-    bool move();
-    bool eatAndMove();
-    bool move(Field& f);
-    bool autoMove();
+    bool isAlive(){return whetherAlive;}
+    bool Move(Field& f,double time);
+    bool autoMove(Field& f,double time);
+
+    bool hurtAtPoint(Field& f,position p);
+    bool hurtAtPoint(Field& f,int pos);
+
+    //temp add
+
+
 private:
     int id;
     vector<position> asnake;
@@ -60,11 +74,33 @@ private:
     double acceleration;
     direction dir,lastDir;
     //add for food & weapon system
-    pair<snakeStatus,double> snakeStatuss;
-//    object currentUsingWeapon;
+    vector<SStatus> SBuffStatus;//有时效
+    vector<snakeStatus> SWeaponStatus;//无时效
+    snakeStatus currentUsingWeapon;
+    bool whetherAlive;
 
-    vector<Food> food;
-    Food curUsingFood;
+//    vector<Food> food;
+//    Food curUsingFood;
+
+    //移动相关
+    bool move(Field& f);
+    bool eatAndMove(Field& f);
+    //处理关键词--伤害
+    bool cutAtPoint(Field& f,int i);
+    bool cutAtPoint(Field& f,position p);
+    bool hurtAtNormalPoint(Field &f,int i);
+    bool hurtAtNormalPoint(Field &f,position p);
+
+    //处理Buff效果
+    void updateSBuffStatus(double time);
+    void dealOtherBuffStatus(snakeStatus ss);
+    void dealDecelerate();
+    void dealAccelerate();
+    bool addWeapon(object w);
+
+    bool canAccelerate();
+    bool isVisible();
+    bool isHalfVisible();
 
     //private member function
 //    inline void updateAcceleration(){

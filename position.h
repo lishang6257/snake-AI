@@ -4,6 +4,7 @@
 
 
 #include "basic.h"
+#include <cmath>
 
 #define max_field_x 22//包含樯
 #define max_field_y 22
@@ -35,7 +36,9 @@ public:
         if(x < 0 || x >= max_field_x || y < 0 || y >= max_field_y) return false;
         return true;
     }
-
+    inline int distance(position& p){
+        return fabs(p.X() - x) + fabs(p.Y() - y);
+    }
     inline position operator + (const position& p) const {
         return position(x+p.x,y+p.y);
     }

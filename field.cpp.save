@@ -1,7 +1,7 @@
-#pragma once
 #include "field.h"
 #include "snake.h"
-#include "d"
+#include "food.h"
+
 Field::Field()
 {
     for(int i = 1;i < max_field_x - 1;i ++){
@@ -21,12 +21,36 @@ Field::Field()
 
     //init snake
     snakes.push_back(Snake());
+
+    //init food
+    while(foods.size() < max_food_num){
+        createOneFood();
+    }
 }
 
 Field::~Field()
 {
     snakes.clear();
+    foods.clear();
 }
+
+bool Field::createOneFood()
+{
+    int i,j,it=0;
+    while(it ++ < 10){
+        i = rand()%max_field_x;
+        j = rand()%max_field_y;
+        if(field[i][j] == NONE){
+            Food f;
+            f.setPosition(position(i,j));
+            foods.push_back(f);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Field::createNFoodAtPosition(Field&f)
 
 void Field::fresh()
 {
@@ -35,12 +59,21 @@ void Field::fresh()
             field[i][j] = NONE;
         }
     }
-    //¸üÐÂsnake
+    //更新 snake
     for(auto s : snakes){
         for(auto sp : s.getSnake()) field[sp.X()][sp.Y()] = SNAKE;
         field[s.getSnake()[0].X()][s.getSnake()[0].Y()] = SNAKEHEAD;
     }
+    //更新 食物
+    while(foods.size() < max_food_num){
+        createOneFood();
+    }
+    for(auto f : foods){
+        field[f.getPosition().X()][f.getPosition().Y()] = f.getFoodType();
+    }
+
 }
+
 
 void Field::painter()
 {
@@ -51,7 +84,18 @@ void Field::painter()
                 case WALL       :  cout << "■";break;
                 case SNAKEHEAD  :  cout << "⊙";break;
                 case SNAKE      :  cout << "○";break;
-                default         :  cout << "  ";break;
+                case Food_Normal         :  cout << "◎";break;
+                case FOOD_Accelerate     :  cout << "Ω";break;
+                case FOOD_Decelerate     :  cout << "Ω";break;
+                case FOOD_Invincible     :  cout << "★";break;
+                case FOOD_Invisible      :  cout << "Ω";break;
+                case FOOD_Weapon_Attack  :  cout << "fa";break;
+                case Food_Weapon_Bramble :  cout << "fb";break;
+                case WEAPON_Fire         :  cout << "wf";break;
+                case WEAPON_Bramble      :  cout << "wb";break;
+
+
+                default                :  cout << "  ";break;
             }
         }
         cout << endl;

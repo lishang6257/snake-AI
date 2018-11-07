@@ -128,6 +128,7 @@ void game::viewer()
 
 void game::controller()
 {
+    if(field.getSnake().size() <= 0) return;
     if (_kbhit()) {
         char KBIn = _getch();
         if(GS == GSPlayOn){
@@ -136,6 +137,11 @@ void game::controller()
                 case 's':case 'S': field.getSnake()[0].setDirection(Down);break;
                 case 'a':case 'A': field.getSnake()[0].setDirection(Left);break;
                 case 'd':case 'D': field.getSnake()[0].setDirection(Right);break;
+                case 't':case 'T': {
+                    field.getSnake()[0].hurtAtPoint(field,3);
+                    cout << "snakw length :" << field.getSnake()[0].getSnake().size() << endl;
+                    break;
+                }
                 case 'p':case 'P': setGameStatus(GSPause); break;
 			    default: break;
             }
@@ -146,11 +152,14 @@ void game::controller()
 			    default: break;
             }
         }
-//        if(!field.getSnake()[0].move(field)) cout << "game over";
-//        else cout << "continue .....";
+        if(!field.getSnake()[0].isAlive()) field.deleteSnake(field.getSnake()[0].getID());
+        cout << "snake num : " << field.getSnake().size() << endl;
+        if(field.getSnake().size() <= 0) return;
+        if(!field.getSnake()[0].Move(field,0)) cout << "game over";
+        else cout << "continue .....";
     }
-    if(!field.getSnake()[0].move(field)) cout << "game over";
-    else cout << "continue .....";
+//    if(!field.getSnake()[0].move(field)) cout << "game over";
+//    else cout << "continue .....";
 //    timer();
 }
 
@@ -158,7 +167,7 @@ void game::playOn()
 {
     setGameStatus(GSPlayOn);
     while(1){
-//        viewer();
+        viewer();
 
 //        field.getSnake()[0].autoMove();
         controller();
