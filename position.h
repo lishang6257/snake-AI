@@ -63,6 +63,16 @@ public:
     inline bool operator !=(const position &p){
         return !(x == p.x && y == p.y);
     }
+    inline bool operator <(const position& p) const{
+        if(p.x > x) return true;
+        if(p.x == x && p.y > y) return true;
+        return false;
+    }
+    inline bool operator >(const position& p) const{
+        if(p.x < x) return true;
+        if(p.x == x && p.y < y) return true;
+        return false;
+    }
     friend std::ostream & operator<<(std::ostream &out,const position& p){
         return (out << "(" << p.x << "," << p.y << ")");
     }

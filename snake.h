@@ -96,11 +96,14 @@ private:
     void dealOtherBuffStatus(snakeStatus ss);
     void dealDecelerate();
     void dealAccelerate();
+    void dealInvicible();
     bool addWeapon(object w);
 
     bool canAccelerate();
-    bool isVisible();
-    bool isHalfVisible();
+    bool isInvisible();
+    bool isHalfInvisible();
+    bool isInvincible();
+
 
     //private member function
 //    inline void updateAcceleration(){

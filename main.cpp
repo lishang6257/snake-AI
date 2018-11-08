@@ -176,9 +176,10 @@ void game::playOn()
 
 int main()
 {
-    srand((unsigned int)time(NULL));
-    game g;
-    g.playOn();
+    cout << (position(0,0) < position(0,1)) << "dfa\n";
+//    srand((unsigned int)time(NULL));
+//    game g;
+//    g.playOn();
     return 0;
 }
 

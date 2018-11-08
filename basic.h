@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 
 #include "position.h"
 
@@ -71,7 +72,7 @@ enum object{NONE,SNAKE,SNAKEHEAD,WALL,
         FOOD_Start,Food_Normal,FOOD_Accelerate,FOOD_Decelerate,FOOD_Invincible,FOOD_Invisible,FOOD_Weapon_Attack,Food_Weapon_Bramble,FOOD_End,
         WEAPON_Start,WEAPON_Fire,WEAPON_Bramble,WEAPON_End};
 enum gameStatus{GSNONE,GSStart,GSPlayOn,GSPause,GSGameOver};
-enum snakeStatus{SSNormal,SSAccelarate,SSDecelerate,SSInvincible,SSInvisible,SSWeapon_Fire,SSWeapon_Bramble,SSHalfInivisible};//添加注意对齐食物顺序
+enum snakeStatus{SSNormal,SSAccelarate,SSDecelerate,SSInvincible,SSInvisible,SSWeapon_Fire,SSWeapon_Bramble,SSHalfInvisible};//添加注意对齐食物顺序
 enum direction{Up,Down,Left,Right,DNone};
 typedef pair<snakeStatus,double> SStatus;//snakeStatus,指状态；double指状态开始时间
 

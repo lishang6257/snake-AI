@@ -1,6 +1,8 @@
 #include "field.h"
 #include "snake.h"
 #include "food.h"
+#include "obstacle.h"
+#include <algorithm>
 
 Field::Field()
 {
@@ -50,6 +52,11 @@ bool Field::createOneFood()
     return false;
 }
 
+bool Field::addFood(position p,object ft)
+{
+
+}
+
 bool Field::createNFoodAtPosition(position p,int n)
 {
 
@@ -59,10 +66,11 @@ bool Field::deleteSnake(int id)
 {
         //这里不更改field值
         for(int i = 0;i < snakes.size();i ++){
-//            if(snakes[i].getID() == id){
+            if(snakes[i].getID() == id){
                 snakes.erase(snakes.begin()+i);break;
-//            }
+            }
         }
+        return false;
 }
 
 

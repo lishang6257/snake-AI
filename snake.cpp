@@ -10,7 +10,7 @@ map<snakeStatus,double> Map_SStatusTime{
     {SSDecelerate,20},
     {SSInvincible,10},
     {SSInvisible,10},
-    {SSHalfInivisible,5}
+    {SSHalfInvisible,5}
 };
 
 snakeStatus objectToSnakeStatus(object w)
@@ -66,7 +66,7 @@ void Snake::updateSBuffStatus(double time)
 {
     for(int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].second - time >= Map_SStatusTime.find(SBuffStatus[i].first)->second){
-            if(SBuffStatus[i].first == SSInvisible) SBuffStatus.push_back(make_pair(SSHalfInivisible,Map_SStatusTime.find(SSHalfInivisible)->second));
+            if(SBuffStatus[i].first == SSInvisible) SBuffStatus.push_back(make_pair(SSHalfInvisible,Map_SStatusTime.find(SSHalfInvisible)->second));
             SBuffStatus.erase(SBuffStatus.begin() + i);break;
         }
     }
@@ -106,13 +106,30 @@ void Snake::dealDecelerate()
         if(SBuffStatus[i].first == SSDecelerate){
             SBuffStatus[i].second += Map_SStatusTime.find(SSDecelerate)->second;return ;
         }
-        if(SBuffStatus[i].first == SSDecelerate) acceleratePos = i;
+        if(SBuffStatus[i].first == SSAccelarate) acceleratePos = i;
     }
     if(acceleratePos == -1){
         SBuffStatus.push_back(make_pair(SSDecelerate,Map_SStatusTime.find(SSDecelerate)->second));
     }
     else{
         SBuffStatus.erase(SBuffStatus.begin()+acceleratePos);
+    }
+}
+
+void Snake::dealInvicible()
+{
+    int deceleratePos = -1;
+    for(int i = 0;i < SBuffStatus.size();i ++){
+        if(SBuffStatus[i].first == SSInvincible){
+            SBuffStatus[i].second += Map_SStatusTime.find(SSInvincible)->second;return ;
+        }
+        if(SBuffStatus[i].first == SSInvincible) deceleratePos = i;
+    }
+    if(deceleratePos == -1){
+        SBuffStatus.push_back(make_pair(SSDecelerate,Map_SStatusTime.find(SSDecelerate)->second));
+    }
+    else{
+        SBuffStatus.erase(SBuffStatus.begin()+deceleratePos);
     }
 }
 
@@ -143,7 +160,7 @@ bool Snake::canAccelerate()
     return true;
 }
 
-bool Snake::isVisible()
+bool Snake::isInvisible()
 {
     for(int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSInvisible) return true;
@@ -151,10 +168,18 @@ bool Snake::isVisible()
     return false;
 }
 
-bool Snake::isHalfVisible()
+bool Snake::isHalfInvisible()
 {
     for(int i = 0;i < SBuffStatus.size();i ++){
-        if(SBuffStatus[i].first == SSHalfInivisible) return true;
+        if(SBuffStatus[i].first == SSHalfInvisible) return true;
+    }
+    return false;
+}
+
+bool Snake::isInvincible()
+{
+    for(int i = 0;i < SBuffStatus.size();i ++){
+        if(SBuffStatus[i].first == SSInvincible) return true;
     }
     return false;
 }
@@ -209,34 +234,35 @@ bool Snake::Move(Field& f,double time)
     position nhead = asnake[0] + Direction[dir]*speed;
     nhead.currect();
 
-//    Snake& snakes = f.getSnake();
-//    for()
-    if(f[nhead] == WALL){
-        //边界墙
-        whetherAlive = false;
-        return hurtAtPoint(f,0);
-    }
     switch(f[nhead]){
         //空白
         case NONE             : return move(f);
         //边界墙
         case WALL             : whetherAlive = false;return hurtAtPoint(f,0);
         //障碍物
-        case OBSTACLE_Normal  : whetherAlive = false;return hurtAtPoint(f,0);
+        case OBSTACLE_Normal  : {
+            if(isInvincible()){/*break and pass*/}
+            if(isInvisible()){return move(f);/*pass*/}
+            whetherAlive = false;return hurtAtPoint(f,0);
+        }
         case OBSTACLE_Bramble : dealDecelerate(); return true;
         //食物
         case FOOD_Accelerate  : dealAccelerate();return eatAndMove(f);
         case FOOD_Decelerate  : dealDecelerate();return eatAndMove(f);
         case Food_Normal      : return eatAndMove(f);
-        case FOOD_Invisible   : dealOtherBuffStatus(objectToSnakeStatus(FOOD_Invisible));return true;
-        case FOOD_Invincible  : dealOtherBuffStatus(objectToSnakeStatus(FOOD_Invincible));return true;
+        case FOOD_Invisible   : dealOtherBuffStatus(objectToSnakeStatus(FOOD_Invisible));return eatAndMove(f);
+        case FOOD_Invincible  : dealInvicible();return eatAndMove(f);
         //武器
         case FOOD_Weapon_Attack  : return addWeapon(FOOD_Weapon_Attack) && eatAndMove(f);
         case Food_Weapon_Bramble : return addWeapon(Food_Weapon_Bramble) && eatAndMove(f);
         //其他蛇
         default :{
             vector<Snake>& ss = f.getSnake();
-//            for(int i = 0)
+            for(int i = 0;i < ss.size();i ++){
+                if(ss[i].isAlive() && (ss[i].isHalfInvisible() || ss[i].isInvisible())){
+                    //活着或者无敌状态
+                }
+            }
         }
     }
 }
