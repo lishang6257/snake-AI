@@ -5,6 +5,11 @@
 #define max_speed 1
 #define min_speed 1
 #define max_acceleration 1
+#define max_gameTimeDistance 30
+#define max_weaponSpeedRate 1.5
+
+#define max_weaponFireThrowDistance 1
+#define max_weaponBrameThrowDistance 3
 
 #define hurt_rate_cutPoint 0.5//截断伤害
 #define hurt_rate_noramlPoint 0.5//普通伤害
@@ -17,6 +22,7 @@
 #include "position.h"
 #include "field.h"
 #include "food.h"
+#include "weapon.h"
 #include <map>
 
 extern position Direction[4];
@@ -59,8 +65,8 @@ public:
     bool Move(Field& f,double time);
     bool autoMove(Field& f,double time);
 
-    bool hurtAtPoint(Field& f,position p);
-    bool hurtAtPoint(Field& f,int pos);
+    bool hurtAtPoint(Field& f,position p,bool flag = true);
+    bool hurtAtPoint(Field& f,int pos,bool flag = true);
 
     //temp add
 
@@ -70,6 +76,7 @@ private:
     vector<position> asnake;
     vector<direction> historyDir;
 
+    double gameTime;
     double speed;
     double acceleration;
     direction dir,lastDir;
@@ -78,25 +85,29 @@ private:
     vector<snakeStatus> SWeaponStatus;//无时效
     snakeStatus currentUsingWeapon;
     bool whetherAlive;
+    bool switchWeapon();
+    bool launchWeapon(Field& f);
 
 //    vector<Food> food;
 //    Food curUsingFood;
 
+    bool updateGameTime(double time);
     //移动相关
-    bool move(Field& f);
+    bool move(Field& f,bool flag = true);
     bool eatAndMove(Field& f);
     //处理关键词--伤害
-    bool cutAtPoint(Field& f,int i);
-    bool cutAtPoint(Field& f,position p);
-    bool hurtAtNormalPoint(Field &f,int i);
-    bool hurtAtNormalPoint(Field &f,position p);
+    bool cutAtPoint(Field& f,int i,bool flag = true);
+    bool cutAtPoint(Field& f,position p,bool flag = true);
+    bool hurtAtNormalPoint(Field &f,int i,bool flag = true);
+    bool hurtAtNormalPoint(Field &f,position p,bool flag = true);
 
     //处理Buff效果
-    void updateSBuffStatus(double time);
+    void updateSBuffStatus();
     void dealOtherBuffStatus(snakeStatus ss);
     void dealDecelerate();
     void dealAccelerate();
     void dealInvicible();
+    void dealInvisible();
     bool addWeapon(object w);
 
     bool canAccelerate();

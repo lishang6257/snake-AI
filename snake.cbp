@@ -44,7 +44,9 @@
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
 		<Unit filename="main.cpp" />
-		<Unit filename="obstacle.h" />
+		<Unit filename="obstacle.h">
+			<Option compile="1" />
+		</Unit>
 		<Unit filename="position.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

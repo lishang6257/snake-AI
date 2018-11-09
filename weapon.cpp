@@ -1,13 +1,17 @@
 #include "weapon.h"
+#include <map>
 
-Weapon::Weapon(vector<position>&pos,object wt,direction d,double s):weapon(pos),weaponType(wt),dir(d),speed(s){}
+map<object,int> Map_WeaponMoveDistance{
+    {WEAPON_Fire,5},
+    {WEAPON_Bramble,3}
+};
 
-void Weapon::setWeapon(vector<position>& pos)
-{
-    weapon = pos;
-}
+map<object,double> Map_WeaponTime{
+    {WEAPON_Fire,10},
+    {WEAPON_Bramble,20}
+};
 
-void Weapon::move(Field& f)
+void Weapon::attack(Field& f)
 {
     /*子弹更新规则
     1. 按照给定的向前平移
@@ -15,7 +19,27 @@ void Weapon::move(Field& f)
     3. 若遇到墙体，直接消失
     4. 若遇到蛇体，判定子弹属性，是否造成伤害，或者debuff效果
     */
-    position nhead = weapon[0] + Direction[dir];
+    if(f[weapon] == WALL){
+        //樯:直接消失
+        whetherExist = false;
+    }
+    else if(f[weapon] < FOOD_End && f[weapon] > WEAPON_Start){
+        //食物:双向消失
+        whetherExist = false;
+        f.deleteFood(weapon);
+    }
+    else if(f[weapon] == OBSTACLE_Bramble){
+
+    }
+    else if(f[weapon] == OBSTACLE_Normal){
+
+    }
+}
+
+void Weapon::move(Field& f)
+{
+
+    position nhead = weapon + Direction[dir];
     nhead.currect();
 
 }

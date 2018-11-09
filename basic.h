@@ -56,12 +56,15 @@ WEAPON_Bramble（荆棘果实）
 在透明->正常形态时
 若身体上的障碍物小于体长1/10产生碾压效果；否则普通障碍物按一次火焰伤害计算，荆棘障碍物发动减速效果，
 蛇身交错则在固定系统时间内(半幽灵态)，按其他蛇按该点火焰伤害（自己无视伤害），时间流逝后（正常态），自动计算伤害[不计算七寸伤害]
+处于幽灵态的蛇受到伤害不产生食物
 
 4.(de)buff果实有系统时效限制
 
 5.武器果实无时限限制，可装备多个,并自动切换，但发射果实需要消耗体长
 
-6.碰撞说明：保护头部，头部受损直接死亡
+6.碰撞说明：
+保护头部，头部受损直接死亡
+特别的，在蛇头与蛇头碰撞中，蛇体长的一方无损，短的一方死亡,相同长度双方死亡
 
 7.所有果实都有增加体长功能
 
@@ -69,7 +72,7 @@ WEAPON_Bramble（荆棘果实）
 
 enum object{NONE,SNAKE,SNAKEHEAD,WALL,
         OBSTACLE_Start,OBSTACLE_Normal,OBSTACLE_Bramble,OBSTACLE_End,
-        FOOD_Start,Food_Normal,FOOD_Accelerate,FOOD_Decelerate,FOOD_Invincible,FOOD_Invisible,FOOD_Weapon_Attack,Food_Weapon_Bramble,FOOD_End,
+        FOOD_Start,Food_Normal,FOOD_Accelerate,FOOD_Decelerate,FOOD_Invincible,FOOD_Invisible,FOOD_Weapon_Fire,Food_Weapon_Bramble,FOOD_End,
         WEAPON_Start,WEAPON_Fire,WEAPON_Bramble,WEAPON_End};
 enum gameStatus{GSNONE,GSStart,GSPlayOn,GSPause,GSGameOver};
 enum snakeStatus{SSNormal,SSAccelarate,SSDecelerate,SSInvincible,SSInvisible,SSWeapon_Fire,SSWeapon_Bramble,SSHalfInvisible};//添加注意对齐食物顺序

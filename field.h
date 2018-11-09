@@ -16,6 +16,7 @@ extern position Direction[4];
 class Snake;
 class Food;
 class Obstacle;
+class Weapon;
 
 class Field{
 public:
@@ -29,27 +30,32 @@ public:
     inline vector<Snake>& getSnake(){
         return snakes;
     }
+    bool deleteSnake(int id);
+
+
     inline vector<Food>& getFood(){
         return foods;
     }
-    bool addFood(position p,object ft);
-    bool deleteFood(position);
-//    bool addFoo
+    void addFood(position p,object ft = FOOD_Start);
+    bool createOneFood();
+    bool createNFoodAtPosition(position p,int n);
+    bool deleteFood(position p);
+
 
     inline vector<Obstacle>& getObstacle(){
         return obstacles;
     }
-    bool addObstacle(position p,object ot);
+    void addObstacle(position p,object ot = OBSTACLE_Start);
     bool deleteObstacle(position p);
+
+
     inline void setObject(position &p,object o){
         field[p.X()][p.Y()] = o;
     }
-    bool deleteSnake(int id);
 
-//    void
+    void addWeapon(Weapon w);
+    bool deleteWeapon(position p);
 
-    bool createOneFood();
-    bool createNFoodAtPosition(position p,int n);
     void painter();
     void fresh();
 private:
@@ -57,6 +63,7 @@ private:
     vector<Snake> snakes;
     vector<Food> foods;
     vector<Obstacle> obstacles;//从小到大排好序的
+    vector<Weapon> weapons;
 };
 
 #endif // FIELD_H_INCLUDED

@@ -17,7 +17,7 @@ class position{
 public:
     position(){x=y=0;};
     position(int x,int y):x(x),y(y){}
-    position(const position& p):x(p.x),y(p.y){};
+//    position(const position& p):x(p.x),y(p.y){};
     ~position(){};
 
     inline int X(){return x;}

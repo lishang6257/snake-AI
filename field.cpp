@@ -2,7 +2,25 @@
 #include "snake.h"
 #include "food.h"
 #include "obstacle.h"
-#include <algorithm>
+#include "weapon.h"
+
+template <typename T>
+int BSearch(vector<T>&p,position value)
+{
+    /*返回值说明：
+    若存在相同的值,返回该值位置
+    若不存在，返回附近的位置
+    - vector中的元素天生互异,元素已按从小到大排序
+    */
+    int l = 0,h = p.size() - 1,mid = (l+h)/2;
+    while(l < h){
+        if(value < p[mid].getPosition()) { h = mid - 1; mid = (l+h)/2; }
+        else if(value > p[mid].getPosition()){l = mid + 1;mid = (l+h)/2;}
+        else return mid;
+    }
+    return mid;
+}
+
 
 Field::Field()
 {
@@ -43,6 +61,7 @@ bool Field::createOneFood()
         i = rand()%max_field_x;
         j = rand()%max_field_y;
         if(field[i][j] == NONE){
+            addFood(position(i,j));
             Food f;
             f.setPosition(position(i,j));
             foods.push_back(f);
@@ -52,27 +71,124 @@ bool Field::createOneFood()
     return false;
 }
 
-bool Field::addFood(position p,object ft)
-{
-
-}
-
 bool Field::createNFoodAtPosition(position p,int n)
 {
+    int scale = sqrt(n)/2 + 1;
+    position Start = p - position(scale,scale);
+    position End = p + position(scale,scale);
+    Start.currect();End.currect();
+    vector<position>nonePos;
+    for(int i = Start.X();i <= End.X();i ++){
+        for(int j = Start.Y();j <= End.Y();j ++){
+            if(field[i][j] == NONE){
+                nonePos.push_back(position(i,j));
+            }
+        }
+    }
+    int oLen = 0;
+    while(n -- > 0 || nonePos.empty()){
+        int pi = rand()%nonePos.size();
+        addObstacle(nonePos[pi]);
+        nonePos.erase(nonePos.begin() + pi);
+        oLen ++;
+    }
+    return oLen;
+}
 
+//csdn 注明,空元素
+void Field::addFood(position p,object ft)
+{
+    //二分查找并插入
+    p.currect();
+    Food f(p);
+    if(ft != FOOD_Start) f.setType(ft);
+
+    if(foods.empty()){
+        foods.insert(foods.begin(),f); return;
+    }
+    int x = foods.size();
+    int pos = BSearch<Food>(foods,p);
+    if(p > foods[pos].getPosition()){
+        foods.insert(foods.begin()+pos+1,f);
+    }
+    else if(p < foods[pos].getPosition()){
+        //只有两种可能[首元素,非首元素]
+        if(!pos)    foods.insert(foods.begin(),f);
+        else foods.insert(foods.begin() + pos,f);
+    }
+    else{
+        foods[pos] = f;
+    }
+    //修改field值
+    field[p.X()][p.Y()] = ft;
+}
+
+bool Field::deleteFood(position p)
+{
+    int pos = BSearch<Food>(foods,p);
+    if(p == foods[pos].getPosition()){
+        field[p.X()][p.Y()] = NONE;
+        foods.erase(foods.begin() + pos);return true;
+    }
+    return false;
+}
+
+void Field::addObstacle(position p,object ot)
+{
+    //本来要合并的食物和障碍物的，后来认为不合适，所以就分开了
+    //二分查找并插入
+    p.currect();
+    Obstacle f(p);
+    if(ot != OBSTACLE_Start) f.setType(ot);
+    if(obstacles.empty()){
+        field[p.X()][p.Y()] = NONE;
+        obstacles.insert(obstacles.begin(),f); return;
+    }
+    int pos = BSearch<Obstacle>(obstacles,p);
+    if(p > obstacles[pos].getPosition()){
+        obstacles.insert(obstacles.begin()+pos+1,f);
+    }
+    else if(p < obstacles[pos].getPosition()){
+        //只有两种可能[首元素,非首元素]
+        if(!pos)    obstacles.insert(obstacles.begin(),f);
+        else obstacles.insert(obstacles.begin() + pos,f);
+    }
+    else{
+        obstacles[pos] = f;
+    }
+    field[p.X()][p.Y()] = ot;
+}
+
+bool Field::deleteObstacle(position p)
+{
+    int pos = BSearch<Obstacle>(obstacles,p);
+    if(p == obstacles[pos].getPosition()){
+        obstacles.erase(obstacles.begin() + pos);return true;
+    }
+    return false;
 }
 
 bool Field::deleteSnake(int id)
 {
-        //这里不更改field值
-        for(int i = 0;i < snakes.size();i ++){
-            if(snakes[i].getID() == id){
-                snakes.erase(snakes.begin()+i);break;
-            }
+    //这里不更改field值[考虑中]:防止幽灵蛇与实体蛇在消失产生冲突，不修改
+    //蛇已经死亡
+    for(int i = 0;i < snakes.size();i ++){
+        if(snakes[i].getID() == id && !snakes[i].isAlive()){
+            snakes.erase(snakes.begin()+i);break;
         }
-        return false;
+    }
+    return false;
 }
 
+void Field::addWeapon(Weapon w)
+{
+
+}
+
+bool Field::deleteWeapon(position p)
+{
+    return false;
+}
 
 void Field::fresh()
 {
@@ -93,7 +209,7 @@ void Field::fresh()
         createOneFood();
     }
     for(auto f : foods){
-        field[f.getPosition().X()][f.getPosition().Y()] = f.getFoodType();
+        field[f.getPosition().X()][f.getPosition().Y()] = f.getType();
     }
 
 }
@@ -113,7 +229,7 @@ void Field::painter()
                 case FOOD_Decelerate     :  cout << "Ω";break;
                 case FOOD_Invincible     :  cout << "★";break;
                 case FOOD_Invisible      :  cout << "Ω";break;
-                case FOOD_Weapon_Attack  :  cout << "fa";break;
+                case FOOD_Weapon_Fire    :  cout << "fa";break;
                 case Food_Weapon_Bramble :  cout << "fb";break;
                 case WEAPON_Fire         :  cout << "wf";break;
                 case WEAPON_Bramble      :  cout << "wb";break;

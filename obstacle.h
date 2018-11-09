@@ -12,13 +12,13 @@ public:
         obstacleType = object(rand()%(OBSTACLE_End - OBSTACLE_Start - 1) + OBSTACLE_Start);
     };
 
-    inline void setObstacle(position p){
+    inline void setPosition(position p){
         obstacle = p;
     }
-    inline void setObstacleType(object ot){obstacleType = ot;}
+    inline void setType(object ot){obstacleType = ot;}
 
-    inline position& getObstacle(){return obstacle;}
-    inline object getOstacleType(){return obstacleType;}
+    inline position& getPosition(){return obstacle;}
+    inline object getType(){return obstacleType;}
 
 private:
     position obstacle;

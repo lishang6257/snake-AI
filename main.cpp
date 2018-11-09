@@ -176,7 +176,30 @@ void game::playOn()
 
 int main()
 {
-    cout << (position(0,0) < position(0,1)) << "dfa\n";
+    //test field
+//    cout << (position(0,5) - position(1,2));
+//    cout << (position(3,3) > position(3,2));
+//
+//    cout << (position(3,3) > position(2,3));
+//    Field f;
+//    while(1){
+//        cls();
+//        f.fresh();
+////        f.painter();
+//        f.addFood(position(1,2),FOOD_Accelerate);
+//        f.addFood(position(1,2),FOOD_Decelerate);
+//        f.addFood(position(0,2),FOOD_Decelerate);
+//        f.addFood(position(0,3),FOOD_Decelerate);
+//        f.addFood(position(2,2),FOOD_Decelerate);
+//        f.addFood(position(3,2),FOOD_Decelerate);
+//        f.addFood(position(2,3),FOOD_Decelerate);
+//        f.deleteFood(position(1,2));
+//        cout << f.getFood().size();
+//        for(auto cc : f.getFood()) cout << cc.getPosition() << " ";
+//        getch();
+//    }
+
+
 //    srand((unsigned int)time(NULL));
 //    game g;
 //    g.playOn();

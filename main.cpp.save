@@ -128,8 +128,8 @@ void game::viewer()
 
 void game::controller()
 {
+    if(field.getSnake().size() <= 0) return;
     if (_kbhit()) {
-        cout << "hit\n";
         char KBIn = _getch();
         if(GS == GSPlayOn){
             switch (KBIn) {
@@ -137,6 +137,11 @@ void game::controller()
                 case 's':case 'S': field.getSnake()[0].setDirection(Down);break;
                 case 'a':case 'A': field.getSnake()[0].setDirection(Left);break;
                 case 'd':case 'D': field.getSnake()[0].setDirection(Right);break;
+                case 't':case 'T': {
+                    field.getSnake()[0].hurtAtPoint(field,3);
+                    cout << "snakw length :" << field.getSnake()[0].getSnake().size() << endl;
+                    break;
+                }
                 case 'p':case 'P': setGameStatus(GSPause); break;
 			    default: break;
             }
@@ -147,11 +152,15 @@ void game::controller()
 			    default: break;
             }
         }
-        if(!field.getSnake()[0].move()) cout << "game over";
-        else cout << "continue ....."
+        if(!field.getSnake()[0].isAlive()) field.deleteSnake(field.getSnake()[0].getID());
+        cout << "snake num : " << field.getSnake().size() << endl;
+        if(field.getSnake().size() <= 0) return;
+        if(!field.getSnake()[0].Move(field,0)) cout << "game over";
+        else cout << "continue .....";
     }
-//    field.getSnake()[0].move();
-    timer();
+//    if(!field.getSnake()[0].move(field)) cout << "game over";
+//    else cout << "continue .....";
+//    timer();
 }
 
 void game::playOn()
@@ -167,9 +176,33 @@ void game::playOn()
 
 int main()
 {
-    srand((unsigned int)time(NULL));
-    game g;
-    g.playOn();
+    //test field
+//    cout << (position(0,5) - position(1,2));
+//    cout << (position(3,3) > position(3,2));
+//
+//    cout << (position(3,3) > position(2,3));
+    Field f;
+    while(1){
+        cls();
+        f.fresh();
+//        f.painter();
+        f.addFood(position(1,2),FOOD_Accelerate);
+        f.addFood(position(1,2),FOOD_Decelerate);
+        f.addFood(position(0,2),FOOD_Decelerate);
+        f.addFood(position(0,3),FOOD_Decelerate);
+        f.addFood(position(2,2),FOOD_Decelerate);
+        f.addFood(position(3,2),FOOD_Decelerate);
+        f.addFood(position(2,3),FOOD_Decelerate);
+        f.deleteFood(position())
+        cout << f.getFood().size();
+        for(auto cc : f.getFood()) cout << cc.getPosition() << " ";
+        getch();
+    }
+
+
+//    srand((unsigned int)time(NULL));
+//    game g;
+//    g.playOn();
     return 0;
 }
 

@@ -15,10 +15,11 @@ public:
 //    Food(Field& field);
 
     inline void setPosition(position pos){p = pos;}
-    inline void setFoodType(object o){foodType = o;}
+    inline void setType(object o){foodType = o;}
 
     inline position& getPosition(){return p;}
-    inline object getFoodType(){return foodType;}
+    inline object getType(){return foodType;}
+
     inline double getBuffTime(){return BuffTime;}
     inline double getSurvivalTime(){return survivalTime;}
     inline snakeStatus ToSnakeStaus(){
