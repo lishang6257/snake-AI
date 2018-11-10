@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -16,7 +14,7 @@
 #include <windows.h>
 using namespace std;
 
-extern position Direction[4] = {position(-1,0),position(1,0),position(0,-1),position(0,1)};
+position Direction[4] = {position(-1,0),position(1,0),position(0,-1),position(0,1)};
 
 string enumToStr(const object& o)
 {
@@ -67,6 +65,8 @@ bool cls() //编程方式实现清除屏幕
 	/* put the cursor at (0, 0) */
 	if (!SetConsoleCursorPosition(hConsole, coordScreen))
 		return false;
+
+    return true;
 }
 
 class game{
@@ -137,9 +137,10 @@ void game::controller()
                 case 's':case 'S': field.getSnake()[0].setDirection(Down);break;
                 case 'a':case 'A': field.getSnake()[0].setDirection(Left);break;
                 case 'd':case 'D': field.getSnake()[0].setDirection(Right);break;
-                case 't':case 'T': {
-                    field.getSnake()[0].hurtAtPoint(field,3);
-                    cout << "snakw length :" << field.getSnake()[0].getSnake().size() << endl;
+                case 'f':case 'F': {
+                    field.getSnake()[0].launchWeapon(field);
+//                    field.getSnake()[0].hurtAtPoint(field,3);
+//                    cout << "snakw length :" << field.getSnake()[0].getSnake().size() << endl;
                     break;
                 }
                 case 'p':case 'P': setGameStatus(GSPause); break;
@@ -153,7 +154,7 @@ void game::controller()
             }
         }
         if(!field.getSnake()[0].isAlive()) field.deleteSnake(field.getSnake()[0].getID());
-        cout << "snake num : " << field.getSnake().size() << endl;
+//        cout << "snake num : " << field.getSnake().size() << endl;
         if(field.getSnake().size() <= 0) return;
         if(!field.getSnake()[0].Move(field,0)) cout << "game over";
         else cout << "continue .....";
@@ -200,9 +201,9 @@ int main()
 //    }
 
 
-//    srand((unsigned int)time(NULL));
-//    game g;
-//    g.playOn();
+    srand((unsigned int)time(NULL));
+    game g;
+    g.playOn();
     return 0;
 }
 

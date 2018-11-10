@@ -1,6 +1,9 @@
 #ifndef WEAPON_H_INCLUDED
 #define WEAPON_H_INCLUDED
 
+#define Weapon_brambleDecelerateRate 0.6
+
+#include "basic.h"
 #include "field.h"
 
 using namespace std;
@@ -11,7 +14,7 @@ public:
     Weapon(position p,object wt,direction d,double s,double time):dir(DNone),weapon(p),weaponType(wt),speed(s),gameTime(time){dis = 0;whetherExist = true;}
 
     inline position& getPosition(){return weapon;}
-    inline object getWeaponType(){return weaponType;}
+    inline object getType(){return weaponType;}
 
     inline void setPosition(position pos){weapon = pos;}
     inline void setType(object wt){weaponType = wt;}
@@ -22,13 +25,12 @@ public:
     void attack(Field& f);
     void move(Field& f);
 private:
+    direction dir;
     position weapon;
     object weaponType;
-    direction dir;
     double speed;//移动速度
-    int dis;
     double gameTime;//子弹发射时间
-
+    int dis;
     bool whetherExist;
 };
 

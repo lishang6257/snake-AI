@@ -40,7 +40,10 @@ Field::Field()
     }
 
     //init snake
-    snakes.push_back(Snake());
+    vector<position> v1{position(3,2),position(4,2),position(5,2),position(6,2),position(7,2),position(8,2),position(9,2),position(10,2)};
+    vector<position> v2{position(3,5),position(4,5),position(5,5),position(6,5),position(7,5),position(8,5),position(9,5),position(10,5)};
+    snakes.push_back(Snake(v1));
+    snakes.push_back(Snake(v2));
 
     //init food
     while(foods.size() < max_food_num){
@@ -54,6 +57,20 @@ Field::~Field()
     foods.clear();
 }
 
+int Field::getSnake(position head,bool flag)//flag 表示是否为实体蛇
+{
+    int i;
+    for(i = 0;i < snakes.size();i ++){
+        if(flag && snakes[i].isAlive() && !snakes[i].isInvisible()){//实体蛇
+            if(snakes[i].getSnake()[0] == head) return i;
+        }
+        if(!flag && snakes[i].isAlive() &&  snakes[i].isInvisible()){//幽灵蛇
+            if(snakes[i].getSnake()[0] == head) return i;
+        }
+    }
+    return -1;
+}
+
 bool Field::createOneFood()
 {
     int i,j,it=0;
@@ -62,9 +79,6 @@ bool Field::createOneFood()
         j = rand()%max_field_y;
         if(field[i][j] == NONE){
             addFood(position(i,j));
-            Food f;
-            f.setPosition(position(i,j));
-            foods.push_back(f);
             return true;
         }
     }
@@ -88,7 +102,7 @@ bool Field::createNFoodAtPosition(position p,int n)
     int oLen = 0;
     while(n -- > 0 || nonePos.empty()){
         int pi = rand()%nonePos.size();
-        addObstacle(nonePos[pi]);
+        addFood(nonePos[pi]);
         nonePos.erase(nonePos.begin() + pi);
         oLen ++;
     }
@@ -106,7 +120,6 @@ void Field::addFood(position p,object ft)
     if(foods.empty()){
         foods.insert(foods.begin(),f); return;
     }
-    int x = foods.size();
     int pos = BSearch<Food>(foods,p);
     if(p > foods[pos].getPosition()){
         foods.insert(foods.begin()+pos+1,f);
@@ -174,20 +187,37 @@ bool Field::deleteSnake(int id)
     //蛇已经死亡
     for(int i = 0;i < snakes.size();i ++){
         if(snakes[i].getID() == id && !snakes[i].isAlive()){
-            snakes.erase(snakes.begin()+i);break;
+            snakes.erase(snakes.begin()+i);
+            return true;
         }
     }
     return false;
 }
 
+//武器处理方式还没想好，暂且这样
 void Field::addWeapon(Weapon w)
 {
-
+    weapons.push_back(w);
+    setObject(w.getPosition(),w.getType());
 }
 
 bool Field::deleteWeapon(position p)
 {
-    return false;
+    bool f = false;
+    for(int i = 0;i < weapons.size();i++){
+        if(weapons[i].getPosition() == p) {
+            f = true;
+            weapons.erase(weapons.begin() + i);
+        }
+    }
+    return f;
+}
+
+void Field::clearObject(vector<position>& p)
+{
+    for(int i = 0;i < p.size();i ++){
+        field[p[i].X()][p[i].Y()] = NONE;
+    }
 }
 
 void Field::fresh()
@@ -200,7 +230,7 @@ void Field::fresh()
     //更新 snake
     for(int i = 0;i < snakes.size();i++){
 //        if(!snakes[i].isAlive()) snakes.erase(snakes.begin()+i);
-        if(!snakes[i].isAlive()) continue;
+        if(!snakes[i].isAlive() || snakes[i].isInvisible()) continue;
         for(auto sp : snakes[i].getSnake()) field[sp.X()][sp.Y()] = SNAKE;
         field[snakes[i].getSnake()[0].X()][snakes[i].getSnake()[0].Y()] = SNAKEHEAD;
     }
@@ -212,6 +242,13 @@ void Field::fresh()
         field[f.getPosition().X()][f.getPosition().Y()] = f.getType();
     }
 
+    //更新武器
+//    for(int i = 0;i < weapons.size();i ++){
+//        field[weapons[i].X()][weapons[i].Y()] = weapons[i].getType();
+//    }
+    for(auto w : weapons){
+        field[w.getPosition().X()][w.getPosition().Y()] = w.getType();
+    }
 }
 
 

@@ -30,6 +30,7 @@ public:
     inline vector<Snake>& getSnake(){
         return snakes;
     }
+    int getSnake(position shead,bool flag = true);
     bool deleteSnake(int id);
 
 
@@ -52,6 +53,7 @@ public:
     inline void setObject(position &p,object o){
         field[p.X()][p.Y()] = o;
     }
+    void clearObject(vector<position>&p);
 
     void addWeapon(Weapon w);
     bool deleteWeapon(position p);

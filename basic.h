@@ -22,7 +22,7 @@ using namespace std;
 Food_Normal(普通果实)只增加体长
 FOOD_Accelerate(加速果实)增幅加速效果或抵消减速效果
 FOOD_Decelerate(减速果实)无法获得加速效果或抵消加速效果
-FOOD_Invincible(无敌果实)无视障碍物，任何减速效果，并不会在蛇碰撞产生效果
+FOOD_Invincible(无敌果实)无视障碍物，任何减速效果，子弹效果，但并不会在蛇碰撞产生效果
 FOOD_Invisible(透明果实)产生透明效果
 
 
@@ -35,7 +35,7 @@ WEAPON_Fire(火焰果实)
 --------------------------
 WEAPON_Bramble（荆棘果实）
 一次发射可发射多颗连续荆棘子弹，以下是对一颗子弹解释
-破坏力：无伤害，蛇遇到后无法加速
+破坏力：无伤害，蛇遇到后无法加速；蛇头遇到静止固定时间
 位移效果：移动固定距离后会停滞在某处直至消亡；无法穿透普通障碍物移动
 存在时间：停滞后开始计算，存在固定系统时间
 ---------------------------
@@ -49,7 +49,7 @@ WEAPON_Bramble（荆棘果实）
 
 2. 距离
 距离取曼哈顿距离，计算方法如下
-空白格（NONE）算一个，蛇身，荆棘算两格
+空白格（NONE）算一个，蛇身，荆棘算两格[考虑是否实现中]
 
 3.透明效果（幽灵态）
 无视任何障碍物，不会对食物，蛇体做出任何反应
@@ -68,6 +68,7 @@ WEAPON_Bramble（荆棘果实）
 
 7.所有果实都有增加体长功能
 
+
 */
 
 enum object{NONE,SNAKE,SNAKEHEAD,WALL,
@@ -75,7 +76,7 @@ enum object{NONE,SNAKE,SNAKEHEAD,WALL,
         FOOD_Start,Food_Normal,FOOD_Accelerate,FOOD_Decelerate,FOOD_Invincible,FOOD_Invisible,FOOD_Weapon_Fire,Food_Weapon_Bramble,FOOD_End,
         WEAPON_Start,WEAPON_Fire,WEAPON_Bramble,WEAPON_End};
 enum gameStatus{GSNONE,GSStart,GSPlayOn,GSPause,GSGameOver};
-enum snakeStatus{SSNormal,SSAccelarate,SSDecelerate,SSInvincible,SSInvisible,SSWeapon_Fire,SSWeapon_Bramble,SSHalfInvisible};//添加注意对齐食物顺序
+enum snakeStatus{SSNormal,SSAccelarate,SSDecelerate,SSInvincible,SSInvisible,SSWeapon_Fire,SSWeapon_Bramble,SSSTILL,SSHalfInvisible};//添加注意对齐食物顺序
 enum direction{Up,Down,Left,Right,DNone};
 typedef pair<snakeStatus,double> SStatus;//snakeStatus,指状态；double指状态开始时间
 

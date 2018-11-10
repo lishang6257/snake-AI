@@ -77,10 +77,10 @@ public:
         return (out << "(" << p.x << "," << p.y << ")");
     }
 
-    inline position left(){y = Max(0,--y);return position(x,y);}
-    inline position right(){y = Min(max_field_y - 1,++y);return position(x,y);}
-    inline position up(){x = Max(0,--y);return position(x,y);}
-    inline position down(){x = Min(max_field_x-1,++x);return position(x,y);}
+    inline position left(){int Y = y;return position(x,Max(0,--Y));}
+    inline position right(){int Y = y;return position(x,Min(max_field_y - 1,++Y));}
+    inline position up(){int X = x;return position( Max(0,--X),y );}
+    inline position down(){int X = x;return position( Min(max_field_x-1,++X),y );}
 
 private:
     int x,y;

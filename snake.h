@@ -68,7 +68,23 @@ public:
     bool hurtAtPoint(Field& f,position p,bool flag = true);
     bool hurtAtPoint(Field& f,int pos,bool flag = true);
 
-    //temp add
+    //处理Buff效果
+    void dealOtherBuffStatus(snakeStatus ss);
+    void dealDecelerate();
+    void dealAccelerate();
+    void dealInvincible();
+    void dealInvisible();
+    void dealStill();
+    bool addWeapon(object w);
+
+    bool canAccelerate();
+    bool isInvisible();
+    bool isHalfInvinsible();
+    bool isInvincible();
+    bool isStill();
+
+    void switchWeapon();
+    bool launchWeapon(Field& f);
 
 
 private:
@@ -85,13 +101,11 @@ private:
     vector<snakeStatus> SWeaponStatus;//无时效
     snakeStatus currentUsingWeapon;
     bool whetherAlive;
-    bool switchWeapon();
-    bool launchWeapon(Field& f);
-
 //    vector<Food> food;
 //    Food curUsingFood;
 
     bool updateGameTime(double time);
+    void updateSBuffStatus();
     //移动相关
     bool move(Field& f,bool flag = true);
     bool eatAndMove(Field& f);
@@ -100,20 +114,6 @@ private:
     bool cutAtPoint(Field& f,position p,bool flag = true);
     bool hurtAtNormalPoint(Field &f,int i,bool flag = true);
     bool hurtAtNormalPoint(Field &f,position p,bool flag = true);
-
-    //处理Buff效果
-    void updateSBuffStatus();
-    void dealOtherBuffStatus(snakeStatus ss);
-    void dealDecelerate();
-    void dealAccelerate();
-    void dealInvicible();
-    void dealInvisible();
-    bool addWeapon(object w);
-
-    bool canAccelerate();
-    bool isInvisible();
-    bool isHalfInvisible();
-    bool isInvincible();
 
 
     //private member function

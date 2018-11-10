@@ -10,7 +10,8 @@ map<snakeStatus,double> Map_SStatusTime{
     {SSDecelerate,20},
     {SSInvincible,10},
     {SSInvisible,10},
-    {SSHalfInvisible,5}
+    {SSHalfInvisible,5},
+    {SSSTILL,5}
 };
 
 snakeStatus objectToSnakeStatus(object w)
@@ -31,6 +32,7 @@ snakeStatus objectToSnakeStatus(object w)
 Snake::Snake(const vector<position> &v)
 {
     whetherAlive = true;
+    gameTime = 0;
     speed = 1;
     acceleration = 0;
     dir = lastDir = DNone;
@@ -42,6 +44,7 @@ Snake::Snake()
     whetherAlive = true;
     speed = 1;
     acceleration = 0;
+    gameTime = 0;
     dir = lastDir = Down;
     asnake.insert(asnake.begin(),position(3,3));
     asnake.insert(asnake.begin(),position(4,3));
@@ -74,7 +77,7 @@ bool Snake::updateGameTime(double time)
 void Snake::updateSBuffStatus()
 {
     for(int i = 0;i < SBuffStatus.size();i ++){
-        if(gameTime - SBuffStatus[i].second >= Map_SStatusTime.find(SBuffStatus[i].first)->second){
+        if(gameTime - SBuffStatus[i].second >= Map_SStatusTime.find(SBuffStatus[i].first)->second){//状态时限到达
             //处理幽灵态
             if(SBuffStatus[i].first == SSInvisible) SBuffStatus.push_back(make_pair(SSHalfInvisible,gameTime));
             SBuffStatus.erase(SBuffStatus.begin() + i);break;
@@ -130,7 +133,7 @@ void Snake::dealDecelerate()
     }
 }
 
-void Snake::dealInvicible()
+void Snake::dealInvincible()
 {
     //消除减速并添加无敌效果
     int deceleratePos = -1;
@@ -164,6 +167,12 @@ void Snake::dealInvisible()
     SBuffStatus.push_back(make_pair(SSDecelerate,gameTime));
 }
 
+void Snake::dealStill()
+{
+    //无敌不受影响
+    if(isInvincible()) return ;
+    dealOtherBuffStatus(SSSTILL);
+}
 //可以改进
 bool Snake::addWeapon(object w)
 {
@@ -180,7 +189,16 @@ bool Snake::addWeapon(object w)
         }
     }
     SWeaponStatus.insert(SWeaponStatus.begin(),weapon);
+    currentUsingWeapon = weapon;
     return true;
+}
+
+bool Snake::isStill()
+{
+    for(int i = 0;i < SBuffStatus.size();i ++){
+        if(SBuffStatus[i].first == SSSTILL) return true;
+    }
+    return false;
 }
 
 bool Snake::canAccelerate()
@@ -199,7 +217,7 @@ bool Snake::isInvisible()
     return false;
 }
 
-bool Snake::isHalfInvisible()
+bool Snake::isHalfInvinsible()
 {
     for(int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSHalfInvisible) return true;
@@ -229,9 +247,11 @@ bool Snake::Move(Field& f,double time)
     */
 
     //更新时间，掉线时间过长
-    return updateGameTime(time);
+    if(!updateGameTime(time)) return false;
 
     updateSBuffStatus();
+
+    if(isStill()) return true;
 
     position nhead = asnake[0] + Direction[dir]*speed;
     nhead.currect();
@@ -243,8 +263,13 @@ bool Snake::Move(Field& f,double time)
         }
         //其他幽灵态玩家
 
-
         return move(f,false);
+    }
+
+    if(isHalfInvinsible()){
+        //半幽灵态
+        cout << "半幽灵态\n";
+        return false;
     }
 
     //实体蛇
@@ -270,8 +295,8 @@ bool Snake::Move(Field& f,double time)
         case FOOD_Decelerate  : dealDecelerate();return eatAndMove(f);
         case Food_Normal      : return eatAndMove(f);
         case FOOD_Invisible   : dealInvisible();return eatAndMove(f);
-        case FOOD_Invincible  : dealInvicible();return eatAndMove(f);
-        //武器
+        case FOOD_Invincible  : dealInvincible();f.clearObject(asnake);return eatAndMove(f);//清除蛇的坐标
+        //武器果实
         case FOOD_Weapon_Fire    : return addWeapon(FOOD_Weapon_Fire) && eatAndMove(f);
         case Food_Weapon_Bramble : return addWeapon(Food_Weapon_Bramble) && eatAndMove(f);
         //其他蛇
@@ -292,9 +317,10 @@ bool Snake::Move(Field& f,double time)
         }
         case SNAKE                :{
             vector<Snake>& ss = f.getSnake();
+            int x = ss.size();
             for(int i = 0;i < ss.size();i ++){
                 //自掘坟墓
-                if(ss[i].getID() == id) return move(f);
+                if(ss[i].getID() == id) conti;
                 //死蛇 || 幽灵蛇 跳过
                 if(!ss[i].isAlive() || ss[i].isInvisible()) continue;
                 //其他
@@ -306,7 +332,18 @@ bool Snake::Move(Field& f,double time)
 
             }
         }
+        case WEAPON_Bramble   :{
+            f.deleteWeapon(nhead);
+            dealDecelerate();
+            return move(f);
+        }
+        case WEAPON_Fire      :{
+            f.deleteWeapon(nhead);
+            return hurtAtPoint(f,0);
+        }
+        default : cout << "snake move error\n";
     }
+    return false;
 }
 
 bool Snake::autoMove(Field& f,double time)
@@ -347,7 +384,7 @@ bool Snake::hurtAtPoint(Field& f,int pos,bool flag)
     return hurtAtNormalPoint(f,pos,flag);
 }
 
-bool Snake::switchWeapon()
+void Snake::switchWeapon()
 {
     int pos;
     for(pos = 0;pos < SWeaponStatus.size();pos ++){
@@ -363,16 +400,17 @@ bool Snake::launchWeapon(Field& f)
     //weapon(position p,object wt,direction d,double speed,double time)
     //过短，无法发射
     if(asnake.size() < 8) return false;
-    position weaponPos = asnake[0] + Direction[dir];
+    position weaponPos = asnake[0] + Direction[dir]*2;
     weaponPos.currect();
     switch(currentUsingWeapon){
         case SSWeapon_Fire    :{
-        
-            f.addWeapon();
+            Weapon w(weaponPos,WEAPON_Fire,dir,max_weaponSpeedRate*speed,gameTime);
+            f.addWeapon(w);
             return true;
         }
         case SSWeapon_Bramble :{
-            f.addWeapon(Weapon(weaponPos ,WEAPON_Bramble,dir,max_weaponSpeedRate*speed,gameTime));
+            Weapon w(weaponPos ,WEAPON_Bramble,dir,max_weaponSpeedRate*speed,gameTime);
+            f.addWeapon(w);
             return true;
         }
         default : return false;
@@ -424,7 +462,7 @@ bool Snake::hurtAtNormalPoint(Field&f,position p,bool flag)
     for(pos = 0;pos < asnake.size();pos ++){
         if(asnake[pos] == p) break;
     }
-    hurtAtNormalPoint(f,pos,flag);
+    return hurtAtNormalPoint(f,pos,flag);
 }
 
 bool Snake::hurtAtPoint(Field& f,position p,bool flag)
@@ -478,7 +516,7 @@ bool Snake::hurtAtNormalPoint(Field&f,int pos,bool flag)
                 }
             }
         }
-        while(newFoodNum -- > 0 || nonePos.empty()){
+        while(newFoodNum -- > 0 && !nonePos.empty()){
             int pi = rand()%nonePos.size();
             f.addFood(nonePos[pi],Food_Normal);
             nonePos.erase(nonePos.begin() + pi);
@@ -489,7 +527,7 @@ bool Snake::hurtAtNormalPoint(Field&f,int pos,bool flag)
         //不产生食物
         declineLength = newFoodNum;
     }
-
+    if(declineLength == 0) declineLength = 1;
     //去除蛇身长度
     asnake.erase(asnake.end()-declineLength,asnake.end());
     return true;
