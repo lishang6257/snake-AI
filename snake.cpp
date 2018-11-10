@@ -35,7 +35,7 @@ Snake::Snake(const vector<position> &v)
     gameTime = 0;
     speed = 1;
     acceleration = 0;
-    dir = lastDir = DNone;
+    dir = lastDir = Up;
     asnake = v;
 }
 
@@ -45,18 +45,10 @@ Snake::Snake()
     speed = 1;
     acceleration = 0;
     gameTime = 0;
-    dir = lastDir = Down;
+    dir = lastDir = Up;
     asnake.insert(asnake.begin(),position(3,3));
     asnake.insert(asnake.begin(),position(4,3));
     asnake.insert(asnake.begin(),position(5,3));
-    asnake.insert(asnake.begin(),position(6,3));
-    asnake.insert(asnake.begin(),position(7,3));
-    asnake.insert(asnake.begin(),position(8,3));
-    asnake.insert(asnake.begin(),position(9,3));
-    asnake.insert(asnake.begin(),position(10,3));
-    asnake.insert(asnake.begin(),position(11,3));
-    asnake.insert(asnake.begin(),position(12,3));
-    asnake.insert(asnake.begin(),position(13,3));
 }
 
 Snake::~Snake()
@@ -253,7 +245,7 @@ bool Snake::Move(Field& f,double time)
 
     if(isStill()) return true;
 
-    position nhead = asnake[0] + Direction[dir]*speed;
+    position nhead = asnake[0] + Direction[dir];
     nhead.currect();
 
     //检测幽灵态;无视其他实体蛇;障碍物;食物

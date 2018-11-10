@@ -35,13 +35,15 @@
 1541614230 source:f:\codeblocks\snake-ai\snake\food.cpp
 	"food.h"
 
-1541826356 source:f:\codeblocks\snake-ai\snake\snake.cpp
+1541834216 source:f:\codeblocks\snake-ai\snake\snake.cpp
 	"snake.h"
 
-1541824676 source:f:\codeblocks\snake-ai\snake\main.cpp
+1541837164 source:f:\codeblocks\snake-ai\snake\main.cpp
 	<iostream>
 	<vector>
 	<ctime>
+	<thread>
+	<mutex>
 	"basic.h"
 	"position.h"
 	"snake.h"
