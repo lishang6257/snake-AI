@@ -59,7 +59,7 @@ Field::~Field()
 
 int Field::getSnake(position head,bool flag)//flag 表示是否为实体蛇
 {
-    int i;
+    unsigned int i;
     for(i = 0;i < snakes.size();i ++){
         if(flag && snakes[i].isAlive() && !snakes[i].isInvisible()){//实体蛇
             if(snakes[i].getSnake()[0] == head) return i;
@@ -185,7 +185,7 @@ bool Field::deleteSnake(int id)
 {
     //这里不更改field值[考虑中]:防止幽灵蛇与实体蛇在消失产生冲突，不修改
     //蛇已经死亡
-    for(int i = 0;i < snakes.size();i ++){
+    for(unsigned int i = 0;i < snakes.size();i ++){
         if(snakes[i].getID() == id && !snakes[i].isAlive()){
             snakes.erase(snakes.begin()+i);
             return true;
@@ -204,7 +204,7 @@ void Field::addWeapon(Weapon w)
 bool Field::deleteWeapon(position p)
 {
     bool f = false;
-    for(int i = 0;i < weapons.size();i++){
+    for(unsigned int i = 0;i < weapons.size();i++){
         if(weapons[i].getPosition() == p) {
             f = true;
             weapons.erase(weapons.begin() + i);
@@ -215,7 +215,7 @@ bool Field::deleteWeapon(position p)
 
 void Field::clearObject(vector<position>& p)
 {
-    for(int i = 0;i < p.size();i ++){
+    for(unsigned int i = 0;i < p.size();i ++){
         field[p[i].X()][p[i].Y()] = NONE;
     }
 }
@@ -228,7 +228,7 @@ void Field::fresh()
         }
     }
     //更新 snake
-    for(int i = 0;i < snakes.size();i++){
+    for(unsigned int i = 0;i < snakes.size();i++){
 //        if(!snakes[i].isAlive()) snakes.erase(snakes.begin()+i);
         if(!snakes[i].isAlive() || snakes[i].isInvisible()) continue;
         for(auto sp : snakes[i].getSnake()) field[sp.X()][sp.Y()] = SNAKE;
@@ -250,7 +250,6 @@ void Field::fresh()
         field[w.getPosition().X()][w.getPosition().Y()] = w.getType();
     }
 }
-
 
 void Field::painter()
 {

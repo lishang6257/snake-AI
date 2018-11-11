@@ -68,7 +68,7 @@ bool Snake::updateGameTime(double time)
 
 void Snake::updateSBuffStatus()
 {
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(gameTime - SBuffStatus[i].second >= Map_SStatusTime.find(SBuffStatus[i].first)->second){//状态时限到达
             //处理幽灵态
             if(SBuffStatus[i].first == SSInvisible) SBuffStatus.push_back(make_pair(SSHalfInvisible,gameTime));
@@ -79,7 +79,7 @@ void Snake::updateSBuffStatus()
 
 void Snake::dealOtherBuffStatus(snakeStatus ss)
 {
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == ss){
             SBuffStatus[i].second -= Map_SStatusTime.find(ss)->second;return ;
         }
@@ -91,7 +91,7 @@ void Snake::dealAccelerate()
 {
     //消除减速或者添加加速效果
     int deceleratePos = -1;
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSAccelarate){
             SBuffStatus[i].second -= Map_SStatusTime.find(SSAccelarate)->second;return ;
         }
@@ -111,7 +111,7 @@ void Snake::dealDecelerate()
     if(isInvincible()) return ;
     //消除加速或者添加减速效果
     int acceleratePos = -1;
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSDecelerate){
             SBuffStatus[i].second -= Map_SStatusTime.find(SSDecelerate)->second;return ;
         }
@@ -129,7 +129,7 @@ void Snake::dealInvincible()
 {
     //消除减速并添加无敌效果
     int deceleratePos = -1;
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSInvincible){
             SBuffStatus[i].second -= Map_SStatusTime.find(SSInvincible)->second;return ;
         }
@@ -147,7 +147,7 @@ void Snake::dealInvisible()
 {
     //消除减速并清除半幽灵态
     int halfInvisiblePos = -1;
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSInvincible){
             SBuffStatus[i].second -= Map_SStatusTime.find(SSInvincible)->second;return ;
         }
@@ -174,7 +174,7 @@ bool Snake::addWeapon(object w)
         case Food_Weapon_Bramble: weapon = SSWeapon_Bramble;break;
         default : return false;
     }
-    for(int i = 0;i < SWeaponStatus.size();i ++){
+    for(unsigned int i = 0;i < SWeaponStatus.size();i ++){
         if(SWeaponStatus[i] == weapon){
             currentUsingWeapon = weapon;
             return true;
@@ -187,7 +187,7 @@ bool Snake::addWeapon(object w)
 
 bool Snake::isStill()
 {
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSSTILL) return true;
     }
     return false;
@@ -195,7 +195,7 @@ bool Snake::isStill()
 
 bool Snake::canAccelerate()
 {
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSDecelerate) return false;
     }
     return true;
@@ -203,7 +203,7 @@ bool Snake::canAccelerate()
 
 bool Snake::isInvisible()
 {
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSInvisible) return true;
     }
     return false;
@@ -211,7 +211,7 @@ bool Snake::isInvisible()
 
 bool Snake::isHalfInvinsible()
 {
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSHalfInvisible) return true;
     }
     return false;
@@ -219,7 +219,7 @@ bool Snake::isHalfInvinsible()
 
 bool Snake::isInvincible()
 {
-    for(int i = 0;i < SBuffStatus.size();i ++){
+    for(unsigned int i = 0;i < SBuffStatus.size();i ++){
         if(SBuffStatus[i].first == SSInvincible) return true;
     }
     return false;
@@ -295,7 +295,7 @@ bool Snake::Move(Field& f,double time)
         case SNAKEHEAD           : {
             //蛇头碰蛇头
             vector<Snake>& ss = f.getSnake();
-            for(int i = 0;i < ss.size();i ++){
+            for(unsigned int i = 0;i < ss.size();i ++){
                 //死蛇 || 幽灵蛇 || 自己 跳过
                 if(!ss[i].isAlive() || ss[i].isInvisible() || ss[i].getID() == id) continue;
                 //其他蛇
@@ -309,13 +309,13 @@ bool Snake::Move(Field& f,double time)
         }
         case SNAKE                :{
             vector<Snake>& ss = f.getSnake();
-            for(int i = 0;i < ss.size();i ++){
+            for(unsigned int i = 0;i < ss.size();i ++){
                 //自掘坟墓
 //                if(ss[i].getID() == id) continue;
                 //死蛇 || 幽灵蛇 跳过
                 if(ss[i].getID() == id || !ss[i].isAlive() || ss[i].isInvisible()) continue;
                 //其他
-                for(int j = 0;j < ss[i].getSnake().size();j ++){
+                for(unsigned int j = 0;j < ss[i].getSnake().size();j ++){
                     if( ss[i].getSnake()[j] == nhead ){
                         return hurtAtPoint(f,0) & ss[i].hurtAtPoint(f,j);
                     }
@@ -350,7 +350,7 @@ bool Snake::autoMove(Field& f,double time)
 
 bool Snake::hurtAtPoint(Field& f,int pos,bool flag)
 {
-    if(pos < 0 || pos >= asnake.size()) return false;
+    if(pos < 0 || (unsigned)pos >= asnake.size()) return false;
 
     //爆头伤害 || 恰好其中七寸
     if(pos == 0 ){
@@ -379,7 +379,7 @@ bool Snake::hurtAtPoint(Field& f,int pos,bool flag)
 
 void Snake::switchWeapon()
 {
-    int pos;
+    unsigned int pos;
     for(pos = 0;pos < SWeaponStatus.size();pos ++){
         if(SWeaponStatus[pos] == currentUsingWeapon) break;
     }
@@ -416,7 +416,7 @@ bool Snake::move(Field& f,bool flag)
     position nhead = asnake[0] + Direction[dir];
     nhead.currect();
     //检测是否与自己身体碰撞
-    for(int i = 0;i < asnake.size() - 1;i ++){
+    for(unsigned int i = 0;i < asnake.size() - 1;i ++){
         if(asnake[i] == nhead){
             return hurtAtPoint(f,0,flag);
         }
@@ -442,7 +442,7 @@ bool Snake::eatAndMove(Field& f)
 
 bool Snake::cutAtPoint(Field& f,position p,bool flag)
 {
-    int pos;
+    unsigned int pos;
     for(pos = 0;pos < asnake.size();pos ++){
         if(asnake[pos] == p) break;
     }
@@ -451,7 +451,7 @@ bool Snake::cutAtPoint(Field& f,position p,bool flag)
 
 bool Snake::hurtAtNormalPoint(Field&f,position p,bool flag)
 {
-    int pos;
+    unsigned int pos;
     for(pos = 0;pos < asnake.size();pos ++){
         if(asnake[pos] == p) break;
     }
@@ -460,7 +460,7 @@ bool Snake::hurtAtNormalPoint(Field&f,position p,bool flag)
 
 bool Snake::hurtAtPoint(Field& f,position p,bool flag)
 {
-    int pos;
+    unsigned int pos;
     for(pos = 0;pos < asnake.size();pos ++){
         if(asnake[pos] == p) break;
     }
@@ -471,8 +471,8 @@ bool Snake::hurtAtPoint(Field& f,position p,bool flag)
 
 bool Snake::cutAtPoint(Field& f,int pos,bool flag)
 {
-    if(pos > asnake.size() - 1) return false;
-    for(int i = pos;i < asnake.size();i ++){
+    if(pos < 0 || (unsigned)pos > asnake.size() - 1) return false;
+    for(unsigned int i = pos;i < asnake.size();i ++){
         if(flag && (rand()%101)/100. < hurt_rate_cutPoint){
             //变成食物
             f.addFood(asnake[i],Food_Normal);
@@ -488,8 +488,7 @@ bool Snake::cutAtPoint(Field& f,int pos,bool flag)
 
 bool Snake::hurtAtNormalPoint(Field&f,int pos,bool flag)
 {
-    cout << "normal hurt " << pos << "........"<< endl;
-    if(pos > asnake.size() - 1) return false;
+    if(pos < 0 || (unsigned)pos > asnake.size() - 1) return false;
     int declineLength = 0;
     int newFoodNum = (asnake.size() - pos)*(asnake.size() - pos)*1./asnake.size()*hurt_rate_noramlPoint;
     if(flag){

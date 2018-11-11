@@ -11,7 +11,7 @@ using namespace std;
 class Weapon{
 public:
     Weapon():dir(DNone),weaponType(WEAPON_Start),speed(0),gameTime(0){dis = 0;whetherExist = true;}
-    Weapon(position p,object wt,direction d,double s,double time):dir(DNone),weapon(p),weaponType(wt),speed(s),gameTime(time){dis = 0;whetherExist = true;}
+    Weapon(position p,object wt,direction d,double s,double time):dir(d),weapon(p),weaponType(wt),speed(s),gameTime(time){dis = 0;whetherExist = true;}
 
     inline position& getPosition(){return weapon;}
     inline object getType(){return weaponType;}

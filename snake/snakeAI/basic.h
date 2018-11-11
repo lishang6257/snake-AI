@@ -78,7 +78,9 @@ enum object{NONE,SNAKE,SNAKEHEAD,WALL,
 enum gameStatus{GSNONE,GSStart,GSPlayOn,GSPause,GSGameOver};
 enum snakeStatus{SSNormal,SSAccelarate,SSDecelerate,SSInvincible,SSInvisible,SSWeapon_Fire,SSWeapon_Bramble,SSSTILL,SSHalfInvisible};//添加注意对齐食物顺序
 enum direction{Up,Down,Left,Right,DNone};
+
 typedef pair<snakeStatus,double> SStatus;//snakeStatus,指状态；double指状态开始时间
+
 
 
 #endif // BASIC_H_INCLUDED

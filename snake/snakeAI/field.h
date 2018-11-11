@@ -1,10 +1,11 @@
-#pragma once
 #ifndef FIELD_H_INCLUDED
 #define FIELD_H_INCLUDED
 //default
 #include "basic.h"
-
 #include <cstdlib>
+
+//for QT
+#include <QWidget>
 
 #define max_food_num 3
 
