@@ -29,6 +29,8 @@ SOURCES += \
         food.cpp \
         snake.cpp \
         weapon.cpp \
+    field.cpp \
+    snakeGame.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,10 +39,9 @@ HEADERS += \
         food.h \
         obstacle.h \
         position.h \
-        snakeGame.h \
         snake.h \
         weapon.h \
-        snakeGame.h
+    snakegame.h
 
 
 FORMS += \
