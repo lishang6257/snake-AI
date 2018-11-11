@@ -1,4 +1,3 @@
-#pragma once
 #include "field.h"
 #include "snake.h"
 #include "food.h"

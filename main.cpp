@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <vector>
 #include <ctime>
@@ -16,7 +14,7 @@
 #include <windows.h>
 using namespace std;
 
-extern position Direction[4] = {position(-1,0),position(1,0),position(0,-1),position(0,1)};
+position Direction[4] = {position(-1,0),position(1,0),position(0,-1),position(0,1)};
 
 string enumToStr(const object& o)
 {
@@ -67,6 +65,8 @@ bool cls() //编程方式实现清除屏幕
 	/* put the cursor at (0, 0) */
 	if (!SetConsoleCursorPosition(hConsole, coordScreen))
 		return false;
+
+    return true;
 }
 
 class SnakeGame{

@@ -2,7 +2,8 @@
 #ifndef BASIC_H_INCLUDED
 #define BASIC_H_INCLUDED
 
-
+#define Max(a,b) ((a) > (b) ? (a) : (b))
+#define Min(a,b) ((a) < (b) ? (a) : (b))
 
 #include <iostream>
 

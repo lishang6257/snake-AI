@@ -1,4 +1,3 @@
-#pragma once
 #include "snake.h"
 
 Snake::Snake(const vector<position> &v)
@@ -33,7 +32,7 @@ bool Snake::move()
 {
     position nhead = asnake[0] + Direction[dir]*speed;
     nhead.currect();
-    for(int i = 0;i < asnake.size() - 1;i ++)
+    for(unsigned int i = 0;i < asnake.size() - 1;i ++)
         if(asnake[i] == nhead) return false;
     if(nhead != asnake[0]){
         asnake.erase(asnake.begin() + asnake.size() - 1);
@@ -60,13 +59,10 @@ bool Snake::move(Field& f)
     position nhead = asnake[0] + Direction[dir]*speed;
     nhead.currect();
     //check snake collosion
-//    Snake& snakes = f.getSnake();
-//    for()
-    if(f[nhead] == WALL || f[nhead] > OBSTACLE_Start && f[nhead] < OBSTACLE_End) return false;
-    if(f[nhead] == WALL || f[nhead] > OBSTACLE_Start && f[nhead] < OBSTACLE_End) return false;
+    if(f[nhead] == WALL) return false;
     if(f[nhead] > FOOD_Start && f[nhead] < FOOD_End) {
         vector<Food>& foods = f.getFood();
-        for(int i = 0;i < foods.size();i ++){
+        for(unsigned int i = 0;i < foods.size();i ++){
             if(foods[i].getPosition() == nhead) {
 //                cout << "delete food......\n";
                 foods.erase(foods.begin() + i);break;
