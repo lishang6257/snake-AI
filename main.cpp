@@ -69,9 +69,9 @@ bool cls() //编程方式实现清除屏幕
 		return false;
 }
 
-class game{
+class SnakeGame{
 public:
-    game();
+    SnakeGame();
     void viewer();
     void controller();
     inline void timer();
@@ -95,7 +95,7 @@ private:
     //test a snake wander
 };
 
-game::game()
+SnakeGame::SnakeGame()
 {
     //model Parameter
 
@@ -108,7 +108,7 @@ game::game()
     time = pauseTime = 0;
 }
 
-void game::timer()
+void SnakeGame::timer()
 {
     switch(GS){
         case GSStart   : startTime = clock();break;
@@ -118,7 +118,7 @@ void game::timer()
     }
 }
 
-void game::viewer()
+void SnakeGame::viewer()
 {
     //fresh
     cls();
@@ -126,7 +126,7 @@ void game::viewer()
     field.painter();
 }
 
-void game::controller()
+void SnakeGame::controller()
 {
     if (_kbhit()) {
         char KBIn = _getch();
@@ -146,21 +146,17 @@ void game::controller()
 			    default: break;
             }
         }
-//        if(!field.getSnake()[0].move(field)) cout << "game over";
-//        else cout << "continue .....";
     }
     if(!field.getSnake()[0].move(field)) cout << "game over";
-    else cout << "continue .....";
-//    timer();
+
+    Sleep(40);
 }
 
-void game::playOn()
+void SnakeGame::playOn()
 {
     setGameStatus(GSPlayOn);
     while(1){
         viewer();
-
-//        field.getSnake()[0].autoMove();
         controller();
     }
 }
@@ -168,27 +164,9 @@ void game::playOn()
 int main()
 {
     srand((unsigned int)time(NULL));
-    game g;
+    SnakeGame g;
     g.playOn();
     return 0;
 }
-
-//void login::help() {
-//	cout << "Ì°³ÔÉß×÷Õ½\n";
-//	cout << "\n\noperator :\n";
-//	cout << "w : up                 |  s : down\n";
-//	cout << "a : left               |  d : right\n";
-//	cout << "j : fire               |  p : pause\n";
-//	cout << "\nimage :\n";
-//	cout << "wall               : ¡ö  | obstacle    : ¡õ\n";
-//	cout << "snakeHead          : ¡Ñ  | snakeBody   : ¡ð\n";
-//	cout << "fire               : ¡Á  | food_normal : ¡ï\n";
-//	cout << "food_accelerator   : ¦¸  | food_attack : ¦²\n";
-//	cout << "food_invincibility : ¡ò  |\n";
-//	cout << "\nauthor : Peter Guan\n";
-//	cout << "email : 1991969298@qq.com\n";
-//	cout << "\npress any Key to start!\n";
-//	_getch();
-//}
 
 
